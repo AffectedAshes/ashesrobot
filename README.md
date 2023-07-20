@@ -1,5 +1,3 @@
-<b>Very basic Twitch Chat Bot</b>
-
 The Bot doesnt have a command database yet, so no adding commands through Twitch Chat currently.
 It also cannot change the title or category of a stream for now.
 
