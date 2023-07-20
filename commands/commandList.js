@@ -9,6 +9,7 @@ const { billyslotsCommand } = require('./billyslots');
 const { weatherCommand } = require('./weather');
 const { randrunnerCommand } = require('./randrunner');
 const { flailCommand } = require('./flail');
+const { commandCommand } = require('./commands');
 const { notslotsCommand } = require('./notslots');
 const { mudkipCommand } = require('./mudkip');
 const { amazina100Command } = require('./amazina100');
@@ -73,6 +74,10 @@ const commandList = {
   '!flail': {
     cooldown: false,
     execute: flailCommand,
+  },
+  '!commands': {
+    cooldown: false,
+    execute: commandCommand,
   },
   '!notslots': {
     cooldown: false,
