@@ -1,9 +1,9 @@
-Very basic Twitch Chat Bot 
+<b>Very basic Twitch Chat Bot 
 
 The Bot doesnt have a command database yet, so no adding commands through Twitch Chat currently.
 It also cannot change the title or category of a stream for now.
 
-Main Commands are:
+Main Commands are:</b>
 
 !slots -> Emote Slots Minigame (60 second cooldown per user) 
 
