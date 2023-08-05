@@ -9,11 +9,13 @@ It also cannot change the title or category of a stream for now.
 
 !randmon [mon] -> guess a random Gen 1 Pokemon (30 second cooldown per user) 
 
-!randomfact -> self explanatory (30 second cooldown per user) 
+!randomfact -> get a random fact (30 second cooldown per user) 
 
 !roll [1-4096] -> guess a random number between 1-4096 (30 second cooldown per user) 
 
-!randrunner -> get a random runner name (30 second cooldown per user) 
+!randrunner -> get a random runner name (30 second cooldown per user)
+
+!define [word] -> get the definition from Urban Dictionary (30 second cooldown per user)
 
 !weather [city] -> get the current weather for x city (30 second cooldown per user) 
 
