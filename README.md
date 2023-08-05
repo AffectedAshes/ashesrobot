@@ -21,4 +21,4 @@ It also cannot change the title or category of a stream for now.
 
 !billyslots -> the best kind of slots (30 second cooldown per user) 
 
-!flail [current max HP] -> Flail Calculator 
+!flail [current max HP] -> Flail Calculator for Gen 1-4
