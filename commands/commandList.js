@@ -8,6 +8,7 @@ const { rollCommand } = require('./roll');
 const { billyslotsCommand } = require('./billyslots');
 const { weatherCommand } = require('./weather');
 const { randrunnerCommand } = require('./randrunner');
+const { defineCommand } = require('./define');
 const { flailCommand } = require('./flail');
 const { commandCommand } = require('./commands');
 const { notslotsCommand } = require('./notslots');
@@ -70,6 +71,11 @@ const commandList = {
     cooldown: true,
     cooldownDuration: 30,
     execute: randrunnerCommand,
+  },
+  '!define': {
+    cooldown: true,
+    cooldownDuration: 30,
+    execute: defineCommand,
   },
   '!flail': {
     cooldown: false,

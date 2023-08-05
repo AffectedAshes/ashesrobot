@@ -17,6 +17,7 @@ const opts = {
     process.env.CHANNEL_NAME3,
     process.env.CHANNEL_NAME4,
     process.env.CHANNEL_NAME5,
+    process.env.CHANNEL_NAME6,
     // Add more channel names as needed
   ]
 };
@@ -49,7 +50,6 @@ function onMessageHandler(target, context, msg, self) {
       const { cooldown, cooldownDuration } = data;
       if (cooldown && isOnCooldown(context.username, command, cooldowns)) {
         const remainingCooldown = getRemainingCooldown(context.username, command, cooldowns);
-        client.say(target, `@${context.username} The command is still ${remainingCooldown} seconds on cooldown.`);
       } else {
         data.execute(target, context.username, client, msg, context); // Pass `msg` and `context` to the command function
         if (cooldown) {
