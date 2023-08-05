@@ -15,7 +15,7 @@ It also cannot change the title or category of a stream for now.
 
 !randrunner -> get a random runner name (30 second cooldown per user)
 
-!define [word] -> get the definitioN from Urban Dictionary (30 second cooldown per user)
+!define [word] -> get the definition from Urban Dictionary (30 second cooldown per user)
 
 !weather [city] -> get the current weather for x city (30 second cooldown per user) 
 
