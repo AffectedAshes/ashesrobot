@@ -4,6 +4,7 @@ const tmi = require('tmi.js');
 
 const commandList = require('./commands/commandList');
 const { isOnCooldown, getRemainingCooldown, setCooldown } = require('./commands/cooldown');      
+const { updateStreamTitle, updateStreamGame, getGameIdFromTwitchApi } = require('./commands/streamUpdater');
 
 // Define configuration options
 const opts = {
@@ -43,6 +44,50 @@ function onMessageHandler(target, context, msg, self) {
 
   // Remove whitespace from chat message
   const commandName = msg.trim();
+
+  // Command to change stream title
+  if (msg.match(/^!changetitle\s+/)) {
+  const newTitle = msg.replace(/^!changetitle\s+/, '');
+  if (isModeratorOrBroadcaster(context)) {
+    updateStreamTitle(process.env.BROADCASTER_ID, newTitle) // Use numeric broadcaster ID
+      .then(() => {
+        client.say(target, `@${context.username} Stream title updated to: ${newTitle}`);
+      })
+      .catch((error) => {
+        console.error('Error updating stream title:', error);
+      });
+  } else {
+    client.say(target, `@${context.username} You do not have permission to use this command.`);
+  }
+  }
+
+  // Command to change stream game
+  if (msg.match(/^!changegame\s+/)) {
+  const newGame = msg.replace(/^!changegame\s+/, '');
+  if (isModeratorOrBroadcaster(context)) {
+    // Lookup game ID from Twitch API (you'll need to implement this part)
+    getGameIdFromTwitchApi(newGame)
+      .then((newGameId) => {
+        updateStreamGame(process.env.BROADCASTER_ID, newGameId) // Use numeric broadcaster ID
+          .then(() => {
+            client.say(target, `@${context.username} Stream game updated to: ${newGame}`);
+          })
+          .catch((error) => {
+            console.error('Error updating stream game:', error);
+          });
+      })
+      .catch((error) => {
+        console.error('Error getting game ID:', error);
+      });
+  } else {
+    client.say(target, `@${context.username} You do not have permission to use this command.`);
+  }
+  }
+
+  // Function to check if user is a moderator or broadcaster
+  function isModeratorOrBroadcaster(context) {
+  return context.mod || context.username.localeCompare(process.env.BROADCASTER_NAME, undefined, { sensitivity: 'base' }) === 0;
+  }
 
   // Iterate over the command list
   for (const [command, data] of Object.entries(commandList)) {
