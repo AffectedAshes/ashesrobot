@@ -65,7 +65,7 @@ function onMessageHandler(target, context, msg, self) {
   if (msg.match(/^!changegame\s+/)) {
   const newGame = msg.replace(/^!changegame\s+/, '');
   if (isModeratorOrBroadcaster(context)) {
-    // Lookup game ID from Twitch API (you'll need to implement this part)
+    // Lookup game ID from Twitch API
     getGameIdFromTwitchApi(newGame)
       .then((newGameId) => {
         updateStreamGame(process.env.BROADCASTER_ID, newGameId) // Use numeric broadcaster ID

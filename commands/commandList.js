@@ -1,6 +1,7 @@
 // commandList.js
 
 const { playSlots } = require('./slots');
+const { handleHangmanCommands } = require('./hangmanBot');
 const { metronomeCommand } = require('./metronome');
 const { randmonCommand } = require('./randmon');
 const { randomfactCommand } = require('./randomfact');
@@ -36,6 +37,15 @@ const commandList = {
     cooldown: true, //activate and deactivate cooldown
     cooldownDuration: 60, //set cooldown duration for command in seconds
     execute: playSlots,
+  },
+  '!hangman': {
+    cooldown: true, 
+    cooldownDuration: 600, 
+    execute: handleHangmanCommands,
+  },
+  '!guess': {
+    cooldown: false, 
+    execute: handleHangmanCommands,
   },
   '!metronome': {
     cooldown: true,
