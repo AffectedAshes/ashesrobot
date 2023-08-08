@@ -93,7 +93,7 @@ function startHangman(target, client) {
     "luckless",
     "LoveSickHero",
     "bangYongguk",
-    "AnaIPikachu",
+    "Analpikachu",
     "PrimalPizza",
     "hwangbro",
     "Yujiito",
