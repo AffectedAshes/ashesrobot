@@ -2,9 +2,11 @@ require('dotenv').config();
 
 const tmi = require('tmi.js');
 
-const commandList = require('./commands/commandList');
-const { isOnCooldown, getRemainingCooldown, setCooldown } = require('./commands/cooldown');      
-const { updateStreamTitle, updateStreamGame, getGameIdFromTwitchApi } = require('./commands/streamUpdater');
+const webServer = require('./data/webServer'); // Require the Express app instance and commands from webServer.js
+
+const commandList = require('./commands/handlers/commandList');
+const { isOnCooldown, getRemainingCooldown, setCooldown } = require('./commands/handlers/cooldown');      
+const { updateStreamTitle, updateStreamGame, getGameIdFromTwitchApi } = require('./commands/handlers/streamUpdater');
 
 // Define configuration options
 const opts = {

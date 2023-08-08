@@ -1,36 +1,36 @@
 // commandList.js
 
-const { playSlots } = require('./slots');
-const { handleHangmanCommands } = require('./hangmanBot');
-const { metronomeCommand } = require('./metronome');
-const { randmonCommand } = require('./randmon');
-const { randomfactCommand } = require('./randomfact');
-const { rollCommand } = require('./roll');
-const { billyslotsCommand } = require('./billyslots');
-const { weatherCommand } = require('./weather');
-const { randrunnerCommand } = require('./randrunner');
-const { defineCommand } = require('./define');
-const { flailCommand } = require('./flail');
-const { commandCommand } = require('./commands');
-const { notslotsCommand } = require('./notslots');
-const { mudkipCommand } = require('./mudkip');
-const { amazina100Command } = require('./amazina100');
-const { rngCommand } = require('./rng');
-const { blursedCommand } = require('./blursed');
-const { gyroballCommand } = require('./gyroball');
-const { dragonsdenCommand } = require('./dragonsden');
-const { digCommand } = require('./dig');
-const { escargotCommand } = require('./escargot');
-const { fontCommand } = require('./font');
-const { tenseSmashCommand } = require('./tenseSmash');
-const { tenseSmash2Command } = require('./tenseSmash2');
-const { proteinCommand } = require('./protein');
-const { bonkCommand } = require('./bonk');
-const { bruhCommand } = require('./bruh');
-const { ezCommand } = require('./ez');
-const { noDudeCommand } = require('./nodude');
-const { yesDudeCommand } = require('./yesdude');
-const { trashCommand } = require('./trash');
+const { playSlots } = require('../complex-cmds/slots');
+const { handleHangmanCommands } = require('../complex-cmds/hangmanBot');
+const { metronomeCommand } = require('../complex-cmds/metronome');
+const { randmonCommand } = require('../complex-cmds/randmon');
+const { randomfactCommand } = require('../complex-cmds/randomfact');
+const { rollCommand } = require('../complex-cmds/roll');
+const { weatherCommand } = require('../complex-cmds/weather');
+const { randrunnerCommand } = require('../complex-cmds/randrunner');
+const { defineCommand } = require('../complex-cmds/define');
+const { flailCommand } = require('../complex-cmds/flail');
+const { commandCommand } = require('../commands');
+const { billyslotsCommand } = require('../billyslots');
+const { notslotsCommand } = require('../notslots');
+const { mudkipCommand } = require('../mudkip');
+const { amazina100Command } = require('../amazina100');
+const { rngCommand } = require('../rng');
+const { blursedCommand } = require('../blursed');
+const { gyroballCommand } = require('../gyroball');
+const { dragonsdenCommand } = require('../dragonsden');
+const { digCommand } = require('../dig');
+const { escargotCommand } = require('../escargot');
+const { fontCommand } = require('../font');
+const { tenseSmashCommand } = require('../tenseSmash');
+const { tenseSmash2Command } = require('../tenseSmash2');
+const { proteinCommand } = require('../protein');
+const { bonkCommand } = require('../bonk');
+const { bruhCommand } = require('../bruh');
+const { ezCommand } = require('../ez');
+const { noDudeCommand } = require('../nodude');
+const { yesDudeCommand } = require('../yesdude');
+const { trashCommand } = require('../trash');
 
 const commandList = {
   '!slots': {
@@ -39,8 +39,7 @@ const commandList = {
     execute: playSlots,
   },
   '!hangman': {
-    cooldown: true, 
-    cooldownDuration: 600, 
+    cooldown: false, 
     execute: handleHangmanCommands,
   },
   '!guess': {
@@ -67,11 +66,6 @@ const commandList = {
     cooldownDuration: 30,
     execute: rollCommand,
   },
-  '!billyslots': {
-    cooldown: true,
-    cooldownDuration: 30,
-    execute: billyslotsCommand,
-  },
   '!weather': {
     cooldown: true,
     cooldownDuration: 30,
@@ -94,6 +88,11 @@ const commandList = {
   '!commands': {
     cooldown: false,
     execute: commandCommand,
+  },
+  '!billyslots': {
+    cooldown: true,
+    cooldownDuration: 30,
+    execute: billyslotsCommand,
   },
   '!notslots': {
     cooldown: false,

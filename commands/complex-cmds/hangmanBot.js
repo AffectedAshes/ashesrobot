@@ -2,10 +2,14 @@
 
 const HangmanGame = require('./hangmanGame');
 
-let hangmanGame = null;
-let hangmanCooldown = false;
+const hangmanChannels = {};
 
 function startHangman(target, client) {
+  if (hangmanChannels[target]?.cooldown) {
+    client.say(target, 'Hangman game is already active. Use !guess to play.');
+    return;
+  }
+
   const words = [
     "AmoebaUK",
     "ExarionU",
@@ -143,51 +147,83 @@ function startHangman(target, client) {
   ];
 
   const randomWord = words[Math.floor(Math.random() * words.length)];
-  hangmanGame = new HangmanGame(randomWord);
+  hangmanChannels[target] = {
+    game: new HangmanGame(randomWord),
+    lastGuessTime: Date.now(),
+    cooldown: true,
+  };
 
-  client.say(target, `Hangman game started! Use !guess to guess a letter or the full runners name. Hidden name: ${hangmanGame.hiddenWord}`);
+  client.say(target, `Hangman game started! Use !guess to guess a letter or the full runner's name. Hidden name: ${hangmanChannels[target].game.hiddenWord}`);
+
+  const timeoutId = setTimeout(() => {
+    endHangman(target, client, 'inactivity');
+  }, 5 * 60 * 1000); // 5 minutes timeout for inactivity
+
+  hangmanChannels[target].timeoutId = timeoutId; // Store the timeout ID for this channel
 }
 
-function endHangman(target, client) {
+function endHangman(target, client, reason) {
+  const hangmanChannel = hangmanChannels[target];
+  if (!hangmanChannel?.game) return; // Check if the hangmanChannel and game exist, if not, return
+
+  const hangmanGame = hangmanChannel.game;
   const result = hangmanGame.isGameOver() ? 'lost' : 'won';
-  const originalWord = hangmanGame.originalWord; // Get the original word from the list
-  client.say(target, `Game over! You ${result}. The runner was: ${originalWord}. You can try again in 10min.`);
-  hangmanGame = null;
+  const originalWord = hangmanGame.originalWord;
+
+  if (reason === 'inactivity') {
+    client.say(target, `Hangman game ended due to inactivity. Use !hangman to start a new game.`);
+  } else {
+    client.say(target, `Hangman round over! You ${result}. The runner was: ${originalWord}. Use !hangman to start a new game.`);
+  }
+
+  clearTimeout(hangmanChannel.timeoutId); // Clear the inactivity timeout for this channel
+  hangmanChannel.cooldown = true; // Prevent automatic game start
+
+  delete hangmanChannels[target]; // Remove the hangmanChannel entry for this channel
 }
 
 function handleHangmanCommands(target, username, client, msg, context) {
+  const hangmanChannel = hangmanChannels[target];
   const hangmanMatch = msg.match(/^!hangman/);
   const guessMatch = msg.match(/^!guess (.+)/);
 
   if (hangmanMatch) {
-    if (!hangmanCooldown) {
+    if (!hangmanChannel || !hangmanChannel.cooldown) {
       startHangman(target, client);
-      hangmanCooldown = true;
-      setTimeout(() => {
-        hangmanCooldown = false;
-        client.say(target, 'Hangman is available again! Use !hangman to start a new game.');
-      }, 10 * 60 * 1000); // 10 minutes cooldown
+    } else {
+      client.say(target, 'Hangman game is already active. Use !guess to play.');
     }
   } else if (guessMatch) {
-    if (!hangmanGame) {
+    if (!hangmanChannel || !hangmanChannel.game) {
       client.say(target, 'Hangman is currently not active.');
     } else {
+      hangmanChannel.lastGuessTime = Date.now(); // Update the last guess time
+
       const guess = guessMatch[1].toLowerCase();
+      const hangmanGame = hangmanChannel.game;
       if (guess === hangmanGame.word) {
         client.say(target, `@${context.username} You guessed the runner! Congratulations, you win!`);
-        endHangman(target, client);
+        endHangman(target, client, 'win');
       } else if (guess.length === 1) {
         const success = hangmanGame.guess(guess);
         if (success) {
           client.say(target, `@${context.username} You guessed ${guess}. Hidden name: ${hangmanGame.hiddenWord}`);
           if (hangmanGame.isGameOver()) {
-            endHangman(target, client);
+            endHangman(target, client, 'loss');
           }
         } else {
           client.say(target, `@${context.username} You already guessed ${guess}.`);
         }
       } else {
-        client.say(target, `@${context.username} Please guess one letter or the full runners name.`);
+        client.say(target, `@${context.username} Please guess one letter or the full runner's name.`);
+      }
+    }
+  } else {
+    // Check for inactivity
+    if (hangmanChannel && hangmanChannel.game && !hangmanChannel.cooldown) {
+      const currentTime = Date.now();
+      if (currentTime - hangmanChannel.lastGuessTime >= 5 * 60 * 1000) {
+        endHangman(target, client, 'inactivity');
       }
     }
   }
