@@ -1,7 +1,7 @@
 // commandList.js
 
 const { playSlots } = require('../complex-cmds/slots');
-const { handleHangmanCommands } = require('../complex-cmds/hangmanBot');
+const { handleHangmanCommands, setHangmanCooldown } = require('../complex-cmds/hangmanBot');
 const { metronomeCommand } = require('../complex-cmds/metronome');
 const { randmonCommand } = require('../complex-cmds/randmon');
 const { randomfactCommand } = require('../complex-cmds/randomfact');
@@ -34,13 +34,14 @@ const { trashCommand } = require('../trash');
 
 const commandList = {
   '!slots': {
-    cooldown: true, //activate and deactivate cooldown
+    cooldown: true, //activate and deactivate cooldown (user specific)
     cooldownDuration: 60, //set cooldown duration for command in seconds
     execute: playSlots,
   },
   '!hangman': {
-    cooldown: false, 
+    cooldown: false, //needs to be false, dont want user specific cooldown for hangman
     execute: handleHangmanCommands,
+    postExecute: setHangmanCooldown, //instead use the global cooldown for !hangman
   },
   '!guess': {
     cooldown: false, 

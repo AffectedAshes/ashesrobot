@@ -3,10 +3,10 @@
 const HangmanGame = require('./hangmanGame');
 
 const hangmanChannels = {};
+const hangmanCooldowns = {}; // Store cooldown timestamps for !hangman command
 
 function startHangman(target, client) {
   if (hangmanChannels[target]?.cooldown) {
-    client.say(target, 'Hangman game is already active. Use !guess to play.');
     return;
   }
 
@@ -171,15 +171,28 @@ function endHangman(target, client, reason) {
   const originalWord = hangmanGame.originalWord;
 
   if (reason === 'inactivity') {
-    client.say(target, `Hangman game ended due to inactivity. Use !hangman to start a new game.`);
+    client.say(target, `Hangman game ended due to inactivity. Next round starts in 10 minutes.`);
   } else {
-    client.say(target, `Hangman round over! You ${result}. The runner was: ${originalWord}. Use !hangman to start a new game.`);
+    client.say(target, `Hangman round over! You ${result}. The runner was: ${originalWord}. Next round starts in 10 minutes.`);
   }
 
   clearTimeout(hangmanChannel.timeoutId); // Clear the inactivity timeout for this channel
   hangmanChannel.cooldown = true; // Prevent automatic game start
 
+  hangmanChannels[target].cooldown = true; // Set cooldown after the game ends
+  setHangmanCooldown(target, client); // Set the global cooldown for !hangman command
+
   delete hangmanChannels[target]; // Remove the hangmanChannel entry for this channel
+}
+
+function setHangmanCooldown(target, client) {
+  // Set a 10-minute cooldown for the !hangman command in this channel
+  hangmanCooldowns[target] = Date.now() + 10 * 60 * 1000;
+
+  // Schedule a message to be sent after the cooldown period is over
+  setTimeout(() => {
+    client.say(target, 'Hangman is available again. Use !hangman to start a new game.');
+  }, 10 * 60 * 1000); // 10 minutes
 }
 
 function handleHangmanCommands(target, username, client, msg, context) {
@@ -188,7 +201,9 @@ function handleHangmanCommands(target, username, client, msg, context) {
   const guessMatch = msg.match(/^!guess (.+)/);
 
   if (hangmanMatch) {
-    if (!hangmanChannel || !hangmanChannel.cooldown) {
+    if (hangmanCooldowns[target] && hangmanCooldowns[target] > Date.now()) {
+      // Do nothing, let the cooldown message handle this case
+    } else if (!hangmanChannel || !hangmanChannel.cooldown) {
       startHangman(target, client);
     } else {
       client.say(target, 'Hangman game is already active. Use !guess to play.');
@@ -231,4 +246,5 @@ function handleHangmanCommands(target, username, client, msg, context) {
 
 module.exports = {
   handleHangmanCommands,
+  setHangmanCooldown,
 };
