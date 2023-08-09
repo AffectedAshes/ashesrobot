@@ -47,8 +47,11 @@ function onMessageHandler(target, context, msg, self) {
   // Remove whitespace from chat message
   const commandName = msg.trim();
 
+  // Get the value of the CHANNEL_NAME1 environment variable
+  const CHANNEL_NAME1 = process.env.CHANNEL_NAME1;
+
   // Command to change stream title
-  if (msg.match(/^!changetitle\s+/)) {
+  if (msg.match(/^!changetitle\s+/) && target === `#${CHANNEL_NAME1}`) {
   const newTitle = msg.replace(/^!changetitle\s+/, '');
   if (isModeratorOrBroadcaster(context)) {
     updateStreamTitle(process.env.BROADCASTER_ID, newTitle) // Use numeric broadcaster ID
@@ -64,13 +67,13 @@ function onMessageHandler(target, context, msg, self) {
   }
 
   // Command to change stream game
-  if (msg.match(/^!changegame\s+/)) {
+  if (msg.match(/^!changegame\s+/) && target === `#${CHANNEL_NAME1}`) {
   const newGame = msg.replace(/^!changegame\s+/, '');
   if (isModeratorOrBroadcaster(context)) {
     // Lookup game ID from Twitch API
     getGameIdFromTwitchApi(newGame)
       .then((newGameId) => {
-        updateStreamGame(process.env.BROADCASTER_ID, newGameId) // Use numeric broadcaster ID
+        updateStreamGame(process.env.BROADCASTER_ID, newGameId)
           .then(() => {
             client.say(target, `@${context.username} Stream game updated to: ${newGame}`);
           })
@@ -79,13 +82,13 @@ function onMessageHandler(target, context, msg, self) {
           });
       })
       .catch((error) => {
-        console.error('Error getting game ID:', error);
+        // No need for console.error here, as it's already handled in the streamUpdater module
       });
   } else {
     client.say(target, `@${context.username} You do not have permission to use this command.`);
   }
   }
-
+  
   // Function to check if user is a moderator or broadcaster
   function isModeratorOrBroadcaster(context) {
   return context.mod || context.username.localeCompare(process.env.BROADCASTER_NAME, undefined, { sensitivity: 'base' }) === 0;
