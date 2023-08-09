@@ -5,7 +5,7 @@ It also cannot change the title or category of any other stream than my own for 
 
 !slots -> Emote Slots Minigame (60 second cooldown per user) 
 
-!hangman -> Hangman Minigame (10 minute cooldown between each game)
+!hangman -> Hangman Minigame (3 minute cooldown between each game)
 
 !metronome [move] -> guess a random Gen 1 Pokemon Move (30 second cooldown per user) 
 
