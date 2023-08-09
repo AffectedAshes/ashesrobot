@@ -171,9 +171,9 @@ function endHangman(target, client, reason) {
   const originalWord = hangmanGame.originalWord;
 
   if (reason === 'inactivity') {
-    client.say(target, `Hangman game ended due to inactivity. Next round starts in 10 minutes.`);
+    client.say(target, `Hangman game ended due to inactivity. Next round starts in 3 minutes.`);
   } else {
-    client.say(target, `Hangman round over! You ${result}. The runner was: ${originalWord}. Next round starts in 10 minutes.`);
+    client.say(target, `Hangman round over! You ${result}. The runner was: ${originalWord}. Next round starts in 3 minutes.`);
   }
 
   clearTimeout(hangmanChannel.timeoutId); // Clear the inactivity timeout for this channel
