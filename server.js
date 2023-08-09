@@ -73,7 +73,7 @@ function onMessageHandler(target, context, msg, self) {
     // Lookup game ID from Twitch API
     getGameIdFromTwitchApi(newGame)
       .then((newGameId) => {
-        updateStreamGame(process.env.BROADCASTER_ID, newGameId)
+        updateStreamGame(process.env.BROADCASTER_ID, newGameId) // Use numeric broadcaster ID
           .then(() => {
             client.say(target, `@${context.username} Stream game updated to: ${newGame}`);
           })

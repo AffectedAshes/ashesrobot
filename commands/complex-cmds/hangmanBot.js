@@ -48,7 +48,7 @@ function startHangman(target, client) {
     "entrpntr",
     "stringflow",
     "NewAmber",
-    "GSharkf",
+    "GShark",
     "Israr",
     "Jordan97",
     "luckytyphlosion",
@@ -187,12 +187,12 @@ function endHangman(target, client, reason) {
 
 function setHangmanCooldown(target, client) {
   // Set a 10-minute cooldown for the !hangman command in this channel
-  hangmanCooldowns[target] = Date.now() + 10 * 60 * 1000;
+  hangmanCooldowns[target] = Date.now() + 3 * 60 * 1000;
 
   // Schedule a message to be sent after the cooldown period is over
   setTimeout(() => {
     client.say(target, 'Hangman is available again. Use !hangman to start a new game.');
-  }, 10 * 60 * 1000); // 10 minutes
+  }, 3 * 60 * 1000); // 3 minutes
 }
 
 function handleHangmanCommands(target, username, client, msg, context) {
