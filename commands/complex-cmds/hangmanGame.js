@@ -5,7 +5,7 @@ class HangmanGame {
     this.word = word.toLowerCase();
     this.originalWord = word; // Store the original word from the list
     this.guesses = [];
-    this.attempts = 10;
+    this.attempts = 14;
     this.hiddenWord = this.hideWord();
   }
 
@@ -27,7 +27,11 @@ class HangmanGame {
   }
 
   isGameOver() {
-    return this.attempts === 0 || !this.hiddenWord.includes('_');
+    return this.attempts === 0; 
+  }
+  
+  isGameWon() {
+    return !this.hiddenWord.includes('_');
   }
 }
 
