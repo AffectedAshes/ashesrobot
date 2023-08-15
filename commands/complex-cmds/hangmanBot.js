@@ -145,7 +145,6 @@ function startHangman(target, client) {
     "Alw0",
     "keepingiticy",
     "BluMagma",
-    "G_heinz",
     "epicdudeguy",
     "Kyutora"
   ];
