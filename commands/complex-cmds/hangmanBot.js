@@ -146,7 +146,22 @@ function startHangman(target, client) {
     "keepingiticy",
     "BluMagma",
     "epicdudeguy",
-    "Kyutora"
+    "Kyutora",
+    "billbonzai",
+    "Galino",
+    "Paraz10",
+    "uwsellan",
+    "Sylwer328",
+    "Matt59620",
+    "Slywoo",
+    "Cayoche",
+    "Wharax",
+    "Matt59620",
+    "Yaksooo",
+    "wartab",
+    "tahis9",
+    "Jielefe"
+    
   ];
 
   const randomWord = words[Math.floor(Math.random() * words.length)];
@@ -174,9 +189,9 @@ function endHangman(target, client, reason) {
   const originalWord = hangmanGame.originalWord;
 
   if (reason === 'inactivity') {
-    client.say(target, `Hangman game ended due to inactivity. Next round starts in 3 minutes.`);
+    client.say(target, `Hangman game ended due to inactivity. Next round starts in 5 minutes.`);
   } else {
-    client.say(target, `Hangman round over! You ${result}. The runner was: ${originalWord}. Next round starts in 3 minutes.`);
+    client.say(target, `Hangman round over! You ${result}. The runner was: ${originalWord}. Next round starts in 5 minutes.`);
   }
 
   clearTimeout(hangmanChannel.timeoutId); // Clear the inactivity timeout for this channel
@@ -189,13 +204,13 @@ function endHangman(target, client, reason) {
 }
 
 function setHangmanCooldown(target, client) {
-  // Set a 3-minute cooldown for the !hangman command in this channel
-  hangmanCooldowns[target] = Date.now() + 3 * 60 * 1000;
+  // Set a 5-minute cooldown for the !hangman command in this channel
+  hangmanCooldowns[target] = Date.now() + 5 * 60 * 1000;
 
   // Schedule a message to be sent after the cooldown period is over
   setTimeout(() => {
     client.say(target, 'Hangman is available again. Use !hangman to start a new game.');
-  }, 3 * 60 * 1000); // 3 minutes
+  }, 5 * 60 * 1000); // 5 minutes
 }
 
 function handleHangmanCommands(target, username, client, msg, context) {
