@@ -175,7 +175,7 @@ function startHangman(target, client) {
 
   const timeoutId = setTimeout(() => {
     endHangman(target, client, 'inactivity');
-  }, 5 * 60 * 1000); // 5 minutes timeout for inactivity
+  }, 15 * 60 * 1000); // 15 minutes timeout for inactivity
 
   hangmanChannels[target].timeoutId = timeoutId; // Store the timeout ID for this channel
 }
