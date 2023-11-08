@@ -140,7 +140,8 @@ const commandList = {
     execute: tenseSmashCommand,
   },
   'tenseSmash': {
-    cooldown: false,
+    cooldown: true,
+    cooldownDuration: 10,
     execute: tenseSmash2Command,
   },
   'protein': {
