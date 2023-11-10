@@ -2,6 +2,7 @@
 
 const { playSlots } = require('../complex-cmds/slots');
 const { handleHangmanCommands, setHangmanCooldown } = require('../complex-cmds/hangmanBot');
+const { processChatGPTCommand } = require('../complex-cmds/chatGPTHandler');
 const { metronomeCommand } = require('../complex-cmds/metronome');
 const { randmonCommand } = require('../complex-cmds/randmon');
 const { randomfactCommand } = require('../complex-cmds/randomfact');
@@ -46,6 +47,11 @@ const commandList = {
   '!guess': {
     cooldown: false, 
     execute: handleHangmanCommands,
+  },
+  '!chatgpt': {
+    cooldown: true,
+    cooldownDuration: 600,
+    execute: processChatGPTCommand,
   },
   '!metronome': {
     cooldown: true,
@@ -172,7 +178,7 @@ const commandList = {
     cooldown: false,
     execute: trashCommand,
   },
-  // Add more commands here
+  // Add more commands as needed
 };
 
 module.exports = commandList;
