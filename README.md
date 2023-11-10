@@ -3,9 +3,11 @@ It also cannot change the title or category of any other stream than my own for 
 
 <b>Main Commands are:</b>
 
-!slots -> Emote Slots Minigame (60 second cooldown per user) 
+!chatgpt [prompt/question} -> give ChatGPT a specific prompt (can be a sentence too) or ask a question for example (10 minute cooldown per user)
 
 !hangman -> Hangman Minigame (5 minute cooldown between each hangman game)
+
+!slots -> Emote Slots Minigame (60 second cooldown per user) 
 
 !metronome [move] -> guess a random Gen 1 Pokemon Move (30 second cooldown per user) 
 
