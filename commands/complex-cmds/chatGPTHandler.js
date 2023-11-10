@@ -51,10 +51,10 @@ async function chatGPTHandler(prompt, retryCount = 0) {
       {
         model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'system', content: 'You are a helpful assistant.' },
+          { role: 'system', content: 'You are a helpful assistant. Keep your answers as short and precise as possible. Please try to not go over the maximum of 700 characters per response.' },
           { role: 'user', content: prompt },
         ],
-        max_tokens: 250, // Adjust the max_tokens value as needed
+        max_tokens: 350, // Adjust the max_tokens value as needed
         temperature: 0.7, // Adjust the temperature value as needed
         // stop: '', // Uncomment and set a stop sequence if needed
       },
