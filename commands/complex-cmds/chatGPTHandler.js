@@ -3,8 +3,8 @@
 const axios = require('axios');
 
 // Rate limits for free trial users
-const FREE_TRIAL_RPM_LIMIT = 20;
-const FREE_TRIAL_TPM_LIMIT = 40000;
+const RPM_LIMIT = 20;
+const TPM_LIMIT = 40000;
 
 // Use a queue to manage requests
 const requestQueue = [];
@@ -31,7 +31,7 @@ async function chatGPTHandler(prompt, retryCount = 0) {
       const recentRequests = requestQueue.filter(time => currentTime - time < 60000); // Check requests in the last minute
 
       // Check RPM limit
-      if (recentRequests.length >= FREE_TRIAL_RPM_LIMIT) {
+      if (recentRequests.length >= RPM_LIMIT) {
         console.log(`Rate limit reached. Waiting for the next minute...`);
         const timeUntilNextMinute = 60000 - (currentTime % 60000);
         await new Promise(resolve => setTimeout(resolve, timeUntilNextMinute));
@@ -39,7 +39,7 @@ async function chatGPTHandler(prompt, retryCount = 0) {
 
       // Check TPM limit
       const tokensUsedInLastMinute = recentRequests.reduce((acc, time) => acc + (currentTime - time), 0);
-      if (tokensUsedInLastMinute >= FREE_TRIAL_TPM_LIMIT) {
+      if (tokensUsedInLastMinute >= TPM_LIMIT) {
         console.log(`Token limit reached. Waiting for the next minute...`);
         const timeUntilNextMinute = 60000 - (currentTime % 60000);
         await new Promise(resolve => setTimeout(resolve, timeUntilNextMinute));
@@ -51,7 +51,7 @@ async function chatGPTHandler(prompt, retryCount = 0) {
       {
         model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'system', content: 'You are a helpful assistant. Keep your answers as short and precise as possible. Please try to not go over the maximum of 700 characters per response.' },
+          { role: 'system', content: 'You are a helpful assistant. Keep your answers as short and precise as possible. Please try to not go over the maximum of 800 characters per response.' },
           { role: 'user', content: prompt },
         ],
         max_tokens: 350, // Adjust the max_tokens value as needed
