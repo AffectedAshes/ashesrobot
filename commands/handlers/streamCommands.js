@@ -7,7 +7,7 @@ function changeStreamTitle(target, username, client, msg, context) {
   const newTitle = msg.replace(/^!changetitle\s+/, '');
 
   if (target === `#${CHANNEL_NAME1}` && isModeratorOrBroadcaster(context)) {
-    updateStreamTitle(process.env.BROADCASTER_ID, newTitle)
+    updateStreamTitle(process.env.BROADCASTER_ID, newTitle) // Use numeric broadcaster ID
       .then(() => {
         client.say(target, `@${context.username} Stream title updated to: ${newTitle}`);
       })
@@ -26,7 +26,7 @@ function changeStreamGame(target, username, client, msg, context) {
   if (target === `#${CHANNEL_NAME1}` && isModeratorOrBroadcaster(context)) {
     getGameIdFromTwitchApi(newGame)
       .then((newGameId) => {
-        updateStreamGame(process.env.BROADCASTER_ID, newGameId)
+        updateStreamGame(process.env.BROADCASTER_ID, newGameId) // Use numeric broadcaster ID
           .then(() => {
             client.say(target, `@${context.username} Stream game updated to: ${newGame}`);
           })
@@ -42,6 +42,7 @@ function changeStreamGame(target, username, client, msg, context) {
   }
 }
 
+// Function to check if user is a moderator or broadcaster
 function isModeratorOrBroadcaster(context) {
   return context.mod || context.username.localeCompare(process.env.BROADCASTER_NAME, undefined, { sensitivity: 'base' }) === 0;
 }

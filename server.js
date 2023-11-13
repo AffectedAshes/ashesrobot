@@ -22,7 +22,6 @@ const opts = {
     process.env.CHANNEL_NAME6,
     process.env.CHANNEL_NAME7,
     process.env.CHANNEL_NAME8,
-    
     // Add more channel names as needed
   ]
 };

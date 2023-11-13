@@ -160,13 +160,11 @@ function startHangman(target, client) {
     "Yaksooo",
     "wartab",
     "tahis9",
-    "Wharax",
     "Hypnoshark",
     "Jadiwi",
     "Prabxz",
     "Dakuuu",
     "Jielefe"
-    
   ];
 
   const randomWord = words[Math.floor(Math.random() * words.length)];
