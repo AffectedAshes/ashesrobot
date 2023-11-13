@@ -5,7 +5,8 @@ const tmi = require('tmi.js');
 const webServer = require('./data/webServer'); // Require the Express app instance and commands from webServer.js
 
 const commandList = require('./commands/handlers/commandList');
-const { isOnCooldown, getRemainingCooldown, setCooldown } = require('./commands/handlers/cooldown');      
+const cooldowns = {}; // Cooldowns object to track command cooldowns  
+const { isOnCooldown, getRemainingCooldown, setCooldown } = require('./commands/handlers/cooldown');   
 
 // Define configuration options
 const opts = {
@@ -36,24 +37,22 @@ client.on('connected', onConnectedHandler);
 // Connect to Twitch:
 client.connect();
 
-// Cooldowns object to track command cooldowns
-const cooldowns = {};
-
 // Called every time a message comes in
 function onMessageHandler(target, context, msg, self) {
   if (self) {
     return; // Ignore messages from the bot
   }
 
-  // Remove whitespace from chat message
-  const commandName = msg.trim();
+  // Remove non-printable characters after the command name
+  const commandName = msg.replace(/[^ -~]+$/, '').trim();
 
   // Iterate over the command list
   for (const [command, data] of Object.entries(commandList)) {
-    if (msg.includes(command)) {
+    if (commandName.startsWith(command)) {
       const { cooldown, cooldownDuration } = data;
       if (cooldown && isOnCooldown(context.username, command, cooldowns)) {
         const remainingCooldown = getRemainingCooldown(context.username, command, cooldowns);
+        //client.say(target, `@${context.username}, ${command} is still ${remainingCooldown} seconds on cooldown.`); // Inform the user about the remaining cooldown time
       } else {
         data.execute(target, context.username, client, msg, context); // Pass `msg` and `context` to the command function
         if (cooldown) {
