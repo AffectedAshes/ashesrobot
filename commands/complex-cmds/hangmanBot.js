@@ -156,10 +156,15 @@ function startHangman(target, client) {
     "Slywoo",
     "Cayoche",
     "Wharax",
-    "Matt59620",
+    "splendidz",
     "Yaksooo",
     "wartab",
     "tahis9",
+    "Wharax",
+    "Hypnoshark",
+    "Jadiwi",
+    "Prabxz",
+    "Dakuuu",
     "Jielefe"
     
   ];

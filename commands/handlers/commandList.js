@@ -1,5 +1,6 @@
 // commandList.js
 
+const { changeStreamTitle, changeStreamGame } = require('../handlers/streamCommands');
 const { playSlots } = require('../complex-cmds/slots');
 const { handleHangmanCommands, setHangmanCooldown } = require('../complex-cmds/hangmanBot');
 const { processChatGPTCommand } = require('../complex-cmds/chatGPTHandler');
@@ -34,6 +35,14 @@ const { yesDudeCommand } = require('../yesdude');
 const { trashCommand } = require('../trash');
 
 const commandList = {
+  '!changetitle': {
+    cooldown: false,
+    execute: changeStreamTitle,
+  },
+  '!changegame': {
+    cooldown: false,
+    execute: changeStreamGame,
+  },
   '!slots': {
     cooldown: true, //activate and deactivate cooldown (user specific)
     cooldownDuration: 60, //set cooldown duration for command in seconds
