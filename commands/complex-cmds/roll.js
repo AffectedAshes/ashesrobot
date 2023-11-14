@@ -1,9 +1,14 @@
 // roll.js
 
+const { sanitizeInput } = require('../handlers/sanitizer');
+
 // Function called when the "!roll" command is issued
 function rollCommand(target, username, client, userMsg, context) {
+  // Sanitize user input
+  const sanitizedMsg = sanitizeInput(userMsg);
+
   const num = rollDice();
-  const userRoll = userMsg.toLowerCase().replace(/^!roll\s+/, "");
+  const userRoll = sanitizedMsg.toLowerCase().replace(/^!roll\s+/, "");
   client.say(target, `You rolled a ${num}.`);
 
   if (userRoll === num.toString()) {

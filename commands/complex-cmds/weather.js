@@ -1,9 +1,16 @@
+// weather.js
+
 const axios = require('axios');
+
+const { sanitizeInput } = require('../handlers/sanitizer');
 
 // Function called when the "!weather" command is issued
 async function weatherCommand(target, username, client, msg) {
+  // Sanitize user input
+  const sanitizedMsg = sanitizeInput(msg);
+
   // Extract the city from the message
-  const cityMatch = msg.match(/^!weather\s+(.+)/);
+  const cityMatch = sanitizedMsg.match(/^!weather\s+(.+)/);
 
   // Check if a valid city is provided
   if (cityMatch) {
@@ -13,11 +20,8 @@ async function weatherCommand(target, username, client, msg) {
       // Ensure proper encoding of the city name
       const encodedCity = encodeURIComponent(city);
 
-      // Clean up the encoded city by removing specific unwanted characters
-      const cleanedEncodedCity = encodedCity.replace(/%20%F3%A0%80%80/g, '');
-
       const apiKey = process.env.API_KEY; // Replace with your actual API key
-      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cleanedEncodedCity}&appid=${apiKey}&units=metric`;
+      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodedCity}&appid=${apiKey}&units=metric`;
 
       const response = await axios.get(apiUrl);
 

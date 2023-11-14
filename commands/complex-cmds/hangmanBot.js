@@ -2,6 +2,8 @@
 
 const HangmanGame = require('./hangmanGame');
 
+const { sanitizeInput } = require('../handlers/sanitizer');
+
 const hangmanChannels = {};
 const hangmanCooldowns = {}; // Store cooldown timestamps for !hangman command
 
@@ -218,8 +220,10 @@ function setHangmanCooldown(target, client) {
 
 function handleHangmanCommands(target, username, client, msg, context) {
   const hangmanChannel = hangmanChannels[target];
-  const hangmanMatch = msg.match(/^!hangman/);
-  const guessMatch = msg.match(/^!guess (.+)/);
+  const sanitizedMsg = sanitizeInput(msg); // Sanitize user input
+
+  const hangmanMatch = sanitizedMsg.match(/^!hangman/);
+  const guessMatch = sanitizedMsg.match(/^!guess (.+)/);
 
   if (hangmanMatch) {
     if (hangmanCooldowns[target] && hangmanCooldowns[target] > Date.now()) {

@@ -1,5 +1,7 @@
 // metronome.js
 
+const { sanitizeInput } = require('../handlers/sanitizer');
+
 //Pokemon Moves Gen 1
 const listOfMoves = [
 
@@ -172,10 +174,12 @@ const listOfMoves = [
 
 // Function called when the "!metronome" command is issued
 function metronomeCommand(target, username, client, userMsg, context) {
+  const sanitizedUserMsg = sanitizeInput(userMsg); // Sanitize user input
+
   const move = rndmove();
   client.say(target, `The enemy Pokemon used ${move}.`);
 
-  const userMove = userMsg.toLowerCase().replace(/^!metronome\s+/, "");
+  const userMove = sanitizedUserMsg.toLowerCase().replace(/^!metronome\s+/, "");
   if (userMove === move.toLowerCase()) {
     client.say(target, `@${context.username} Congrats, you won Metronome!`);
   }

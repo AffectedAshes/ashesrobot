@@ -2,6 +2,8 @@
 
 const axios = require('axios');
 
+const { sanitizeInput } = require('../handlers/sanitizer');
+
 // Rate limits for free trial users
 const RPM_LIMIT = 20;
 const TPM_LIMIT = 40000;
@@ -9,9 +11,13 @@ const TPM_LIMIT = 40000;
 // Use a queue to manage requests
 const requestQueue = [];
 
+// ChatGPT handler with input sanitization
 async function processChatGPTCommand(target, username, client, msg, context) {
   try {
-    const userPrompt = msg.replace(/^!chatgpt\s+/, '');
+    // Sanitize user input
+    const sanitizedMsg = sanitizeInput(msg);
+
+    const userPrompt = sanitizedMsg.replace(/^!chatgpt\s+/, '');
     const chatGPTResponse = await chatGPTHandler(userPrompt);
     client.say(target, `@${username} ChatGPT says: ${chatGPTResponse}`);
   } catch (error) {

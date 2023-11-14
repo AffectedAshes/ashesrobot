@@ -2,11 +2,16 @@
 
 const axios = require('axios');
 
-// Function called when the "!define" command is issued
-async function defineCommand(target, username, client, userMsg) {
-  const word = userMsg.toLowerCase().replace(/^!define\s+/, '');
+const { sanitizeInput } = require('../handlers/sanitizer');
 
+// Define command with input sanitization
+async function defineCommand(target, username, client, userMsg) {
   try {
+    // Sanitize user input
+    const sanitizedMsg = sanitizeInput(userMsg);
+
+    const word = sanitizedMsg.toLowerCase().replace(/^!define\s+/, '');
+
     const response = await axios.get(`https://api.urbandictionary.com/v0/define?term=${encodeURIComponent(word)}`);
     const data = response.data;
 
