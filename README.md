@@ -23,6 +23,4 @@ It also cannot change the title or category of any other stream than my own for 
 
 !weather [city] -> get the current weather for x city (30 second cooldown per user) 
 
-!billyslots -> the best kind of slots (30 second cooldown per user) 
-
 !flail [current max HP] -> Flail Calculator for Gen 1-4
