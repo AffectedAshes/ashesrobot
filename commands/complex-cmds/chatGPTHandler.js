@@ -12,17 +12,17 @@ const TPM_LIMIT = 40000;
 const requestQueue = [];
 
 // ChatGPT handler with input sanitization
-async function processChatGPTCommand(target, username, client, msg, context) {
+async function processChatGPTCommand(target, client, context, msg) {
   try {
     // Sanitize user input
     const sanitizedMsg = sanitizeInput(msg);
 
     const userPrompt = sanitizedMsg.replace(/^!chatgpt\s+/, '');
     const chatGPTResponse = await chatGPTHandler(userPrompt);
-    client.say(target, `@${username} ChatGPT says: ${chatGPTResponse}`);
+    client.say(target, `@${context.username} ChatGPT says: ${chatGPTResponse}`);
   } catch (error) {
     console.error('Error processing ChatGPT command:', error.message);
-    client.say(target, `@${username} An error occurred while processing the ChatGPT command.`);
+    client.say(target, `@${context.username} An error occurred while processing the ChatGPT command.`);
   }
 }
 

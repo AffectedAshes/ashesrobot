@@ -4,7 +4,7 @@ const { updateStreamTitle, updateStreamGame, getGameIdFromTwitchApi } = require(
 
 const { sanitizeInput } = require('../handlers/sanitizer');
 
-function changeStreamTitle(target, username, client, msg, context) {
+function changeStreamTitle(target, client, context, msg) {
   try {
     // Sanitize user input
     const sanitizedMsg = sanitizeInput(msg);
@@ -29,7 +29,7 @@ function changeStreamTitle(target, username, client, msg, context) {
   }
 }
 
-function changeStreamGame(target, username, client, msg, context) {
+function changeStreamGame(target, client, context, msg) {
   try {
     // Sanitize user input
     const sanitizedMsg = sanitizeInput(msg);

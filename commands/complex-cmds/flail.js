@@ -3,7 +3,7 @@
 const { sanitizeInput } = require('../handlers/sanitizer');
 
 // Flail command with input sanitization
-function flailCommand(target, username, client, msg) {
+function flailCommand(target, client, context, msg) {
   try {
     // Sanitize user input
     const sanitizedMsg = sanitizeInput(msg);
@@ -13,9 +13,9 @@ function flailCommand(target, username, client, msg) {
       const maxHP = parseInt(match[1], 10);
       if (!isNaN(maxHP)) {
         if (maxHP === 0) {
-          client.say(target, `@${username} Congrats, you are dead :)`);
+          client.say(target, `@${context.username} Congrats, you are dead :)`);
         } else if (maxHP === 1 || maxHP === 2) {
-          client.say(target, `@${username} Your max HP is too low for any flail.`);
+          client.say(target, `@${context.username} Your max HP is too low for any flail.`);
         } else {
           let response = '';
           const currentHP = {
@@ -33,14 +33,14 @@ function flailCommand(target, username, client, msg) {
           client.say(target, response);
         }
       } else {
-        client.say(target, `@${username} Invalid command usage. Please use the format !flail <max HP>.`);
+        client.say(target, `@${context.username} Invalid command usage. Please use the format !flail <max HP>.`);
       }
     } else {
-      client.say(target, `@${username} Invalid command usage. Please use the format !flail <max HP>.`);
+      client.say(target, `@${context.username} Invalid command usage. Please use the format !flail <max HP>.`);
     }
   } catch (error) {
     console.error('Error processing flail command:', error.message);
-    client.say(target, `@${username} An error occurred while processing the flail command.`);
+    client.say(target, `@${context.username} An error occurred while processing the flail command.`);
   }
 }
 

@@ -137,7 +137,7 @@ const listOfFacts = [
   ];
 
 // Function called when the "!randomfact" command is issued
-function randomfactCommand(target, username, client, userMsg, context) {
+function randomfactCommand(target, client) {
     const fact = rndfact();
     client.say(target, `${fact}`);
 }

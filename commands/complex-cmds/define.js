@@ -5,10 +5,10 @@ const axios = require('axios');
 const { sanitizeInput } = require('../handlers/sanitizer');
 
 // Define command with input sanitization
-async function defineCommand(target, username, client, userMsg) {
+async function defineCommand(target, client, context, msg) {
   try {
     // Sanitize user input
-    const sanitizedMsg = sanitizeInput(userMsg);
+    const sanitizedMsg = sanitizeInput(msg);
 
     const word = sanitizedMsg.toLowerCase().replace(/^!define\s+/, '');
 
@@ -17,13 +17,13 @@ async function defineCommand(target, username, client, userMsg) {
 
     if (data.list && data.list.length > 0) {
       const definition = data.list[0].definition;
-      client.say(target, `@${username} Definition of "${word}": ${definition}`);
+      client.say(target, `@${context.username} Definition of "${word}": ${definition}`);
     } else {
-      client.say(target, `@${username} No definition found for "${word}".`);
+      client.say(target, `@${context.username} No definition found for "${word}".`);
     }
   } catch (error) {
     console.error('Error fetching definition:', error);
-    client.say(target, `@${username} An error occurred while fetching the definition.`);
+    client.say(target, `@${context.username} An error occurred while fetching the definition.`);
   }
 }
 

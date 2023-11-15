@@ -24,6 +24,7 @@ const { dragonsdenCommand } = require('../cmds/dragonsden');
 const { digCommand } = require('../cmds/dig');
 const { escargotCommand } = require('../cmds/escargot');
 const { fontCommand } = require('../cmds/font');
+const { trashCommand } = require('../cmds/trash');
 const { tenseSmashCommand } = require('../cmds/tenseSmash');
 const { tenseSmash2Command } = require('../cmds/tenseSmash2');
 const { proteinCommand } = require('../cmds/protein');
@@ -32,7 +33,6 @@ const { bruhCommand } = require('../cmds/bruh');
 const { ezCommand } = require('../cmds/ez');
 const { noDudeCommand } = require('../cmds/nodude');
 const { yesDudeCommand } = require('../cmds/yesdude');
-const { trashCommand } = require('../cmds/trash');
 
 const commandList = {
   '!changetitle': {
@@ -150,6 +150,10 @@ const commandList = {
     cooldown: false,
     execute: fontCommand,
   },
+  '!trash': {
+    cooldown: false,
+    execute: trashCommand,
+  },
   '!tenseSmash': {
     cooldown: false,
     execute: tenseSmashCommand,
@@ -182,10 +186,6 @@ const commandList = {
   'yes dude': {
     cooldown: false,
     execute: yesDudeCommand,
-  },
-  '🗑️': {
-    cooldown: false,
-    execute: trashCommand,
   },
   // Add more commands as needed
 };

@@ -5,7 +5,7 @@ const axios = require('axios');
 const { sanitizeInput } = require('../handlers/sanitizer');
 
 // Function called when the "!weather" command is issued
-async function weatherCommand(target, username, client, msg) {
+async function weatherCommand(target, client, context, msg) {
   // Sanitize user input
   const sanitizedMsg = sanitizeInput(msg);
 
@@ -33,16 +33,16 @@ async function weatherCommand(target, username, client, msg) {
 
         const windDirection = getWindDirection(deg);
         const message = `Weather in ${name}: ${description}. Temperature: ${temp}°C. Humidity: ${humidity}%. Wind: ${speed} m/s, ${windDirection}`;
-        client.say(target, `@${username} ${message}`);
+        client.say(target, `@${context.username} ${message}`);
       } else {
-        client.say(target, `@${username} Failed to fetch weather data. Please try again later.`);
+        client.say(target, `@${context.username} Failed to fetch weather data. Please try again later.`);
       }
     } catch (error) {
       console.error('Error fetching weather data:', error);
-      client.say(target, `@${username} An error occurred while fetching weather data. Please try again later.`);
+      client.say(target, `@${context.username} An error occurred while fetching weather data. Please try again later.`);
     }
   } else {
-    client.say(target, `@${username} Invalid usage. Please provide a valid city name after !weather.`);
+    client.say(target, `@${context.username} Invalid usage. Please provide a valid city name after !weather.`);
   }
 }
 

@@ -1,7 +1,7 @@
 // slots.js
 
 // Function called when the "slots" command is issued
-function playSlots(target, username, client) {
+function playSlots(target, client, context) {
     const emotes = [
       'Kappa',
       'affect23Pray',
@@ -48,10 +48,10 @@ function playSlots(target, username, client) {
     }
   
     const emoteString = pickedEmotes.join(' | ');
-    client.say(target, `@${username} -> ${emoteString}`);
+    client.say(target, `@${context.username} -> ${emoteString}`);
   
     if (pickedEmotes.every((emote) => emote === pickedEmotes[0])) {
-      client.say(target, `@${username} Congrats, you won Slots!`);
+      client.say(target, `@${context.username} Congrats, you won Slots!`);
     }
   }
 

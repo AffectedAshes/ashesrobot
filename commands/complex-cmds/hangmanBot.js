@@ -218,7 +218,7 @@ function setHangmanCooldown(target, client) {
   }, 5 * 60 * 1000); // 5 minutes
 }
 
-function handleHangmanCommands(target, username, client, msg, context) {
+function handleHangmanCommands(target, client, context, msg) {
   const hangmanChannel = hangmanChannels[target];
   const sanitizedMsg = sanitizeInput(msg); // Sanitize user input
 

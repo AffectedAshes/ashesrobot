@@ -160,13 +160,13 @@ const listOfMons = [
   ];
 
 // Function called when the "!randmon" command is issued
-function randmonCommand(target, username, client, userMsg, context) {
-  const sanitizedUserMsg = sanitizeInput(userMsg); // Sanitize user input
+function randmonCommand(target, client, context, msg) {
+  const sanitizedMsg = sanitizeInput(msg); // Sanitize user input
   
   const mon = rndmon();
   client.say(target, `${mon}`);
   
-  const userMon = sanitizedUserMsg.toLowerCase().replace(/^!randmon\s+/, "");
+  const userMon = sanitizedMsg.toLowerCase().replace(/^!randmon\s+/, "");
   if (userMon === mon.toLowerCase()) {
     client.say(target, `@${context.username} Congrats, you won Randmon!`);
   }

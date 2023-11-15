@@ -1,7 +1,7 @@
 // bruh.js
 
 // Function called when the "bruh" command is issued
-function bruhCommand(target, username, client, userMsg, context) {
+function bruhCommand(target, client) {
     client.say(target, `rubent15Bruh`);
 }
 

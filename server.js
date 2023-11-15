@@ -45,7 +45,7 @@ function onMessageHandler(target, context, msg, self) {
         const remainingCooldown = getRemainingCooldown(context.username, command, cooldowns);
         //client.say(target, `@${context.username}, ${command} is still ${remainingCooldown} seconds on cooldown.`); // Inform the user about the remaining cooldown time
       } else {
-        data.execute(target, context.username, client, msg, context); // Pass `msg` and `context` to the command function
+        data.execute(target, client, context, msg); // Pass `msg` and `context` to the command function
         if (cooldown) {
           setCooldown(context.username, command, cooldowns, cooldownDuration);
         }

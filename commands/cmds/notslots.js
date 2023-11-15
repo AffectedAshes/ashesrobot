@@ -1,7 +1,7 @@
 // notslots.js
 
 // Function called when the "!notslots" command is issued
-function notslotsCommand(target, username, client, userMsg, context) {
+function notslotsCommand(target, client) {
     client.say(target, `ok`);
 }
 

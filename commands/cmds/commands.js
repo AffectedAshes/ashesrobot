@@ -1,7 +1,7 @@
 // commands.js
 
 // Function called when the "!commands" command is issued
-function commandCommand(target, username, client, userMsg, context) {
+function commandCommand(target, client) {
     client.say(target, `https://github.com/AffectedAshes/ashesrobot`);
 }
 

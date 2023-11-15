@@ -158,12 +158,12 @@ var runner_list = [
 ];
 
 // Function called when the "!randrunner" command is issued
-function randrunnerCommand(target, username, client) {
+function randrunnerCommand(target, client, context) {
   const start = getRandomNamePart(runner_list);
   const end = getRandomNamePart(runner_list);
 
   const combinedName = `${start}${end}`;
-  client.say(target, `@${username} Your random runner name is: ${combinedName}`);
+  client.say(target, `@${context.username} Your random runner name is: ${combinedName}`);
 }
 
 // Helper function to get a random name part from the list
