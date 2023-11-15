@@ -30,7 +30,7 @@ function startHangman(target, client) {
     "Wh0misDS",
     "CasualPokePlayer",
     "Enderborn",
-    "JP_Xinnam",
+    "JPXinnam",
     "kurddt",
     "SLweed",
     "Vandio",
@@ -57,10 +57,10 @@ function startHangman(target, client) {
     "MaddiicT",
     "RangerSquid",
     "Sparkle",
-    "_PoY",
+    "PoY",
     "winkmarket",
     "AEtienne",
-    "thunder_147_",
+    "thunder147",
     "TiKevin83",
     "randalleatscheese",
     "ringo777",
@@ -86,7 +86,7 @@ function startHangman(target, client) {
     "knoxconary",
     "JTMagicman",
     "SheltieSci",
-    "Irondre_",
+    "Irondre",
     "cooltrainermichael",
     "truely",
     "PicklePlop",
@@ -101,12 +101,12 @@ function startHangman(target, client) {
     "Yujito",
     "DerTeppich",
     "emray",
-    "square_sr",
+    "squaresr",
     "stocchi",
     "TehHammerShow",
     "GoodAtBeingSimple",
     "EconSean",
-    "I_only_say_VoHiYo",
+    "IonlysayVoHiYo",
     "LegendEater",
     "callumbal",
     "AlanSchweitzer",
@@ -123,13 +123,13 @@ function startHangman(target, client) {
     "Rubentus",
     "SaiyanCinq",
     "TheKRAM",
-    "Buster_poke",
+    "Busterpoke",
     "MoneyHypeMike",
     "halqery",
     "The4thGenGamer",
     "EkmanLarsson",
     "itotaka1031",
-    "Oh_Snap",
+    "OhSnap",
     "kerbis54",
     "jyash4",
     "zypotic",
@@ -262,14 +262,14 @@ function handleHangmanCommands(target, username, client, msg, context) {
         client.say(target, `@${context.username} Please guess one letter or the full runner's name.`);
       }
     }
-  } else {
+  //} else {
     // Check for inactivity
-    if (hangmanChannel && hangmanChannel.game && !hangmanChannel.cooldown) {
-      const currentTime = Date.now();
-      if (currentTime - hangmanChannel.lastGuessTime >= 5 * 60 * 1000) {
-        endHangman(target, client, 'inactivity');
-      }
-    }
+    //if (hangmanChannel && hangmanChannel.game && !hangmanChannel.cooldown) {
+      //const currentTime = Date.now();
+      //if (currentTime - hangmanChannel.lastGuessTime >= 5 * 60 * 1000) {
+        //endHangman(target, client, 'inactivity');
+      //}
+    //}
   }
 }
 

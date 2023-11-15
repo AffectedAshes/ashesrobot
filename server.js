@@ -14,17 +14,8 @@ const opts = {
     username: process.env.BOT_USERNAME,
     password: process.env.OAUTH_TOKEN
   },
-  channels: [
-    process.env.CHANNEL_NAME1,
-    process.env.CHANNEL_NAME2,
-    process.env.CHANNEL_NAME3,
-    process.env.CHANNEL_NAME4,
-    process.env.CHANNEL_NAME5,
-    process.env.CHANNEL_NAME6,
-    process.env.CHANNEL_NAME7,
-    process.env.CHANNEL_NAME8,
-    // Add more channel names as needed
-  ]
+  channels: process.env.CHANNEL_LIST.split(","),
+  joinInterval: 3000,
 };
 
 // Create a client with our options
