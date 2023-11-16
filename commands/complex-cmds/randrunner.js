@@ -1,6 +1,6 @@
 // randrunner.js
 
-var runner_list = [
+const runner_list = [
   "Amoeba UK",
   "Exari onU",
   "wer ster",
