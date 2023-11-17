@@ -1,5 +1,7 @@
 // randomfact.js
 
+const { Random } = require('random-js');
+
 //Random Facts
 const listOfFacts = [
 
@@ -136,19 +138,22 @@ const listOfFacts = [
   
   ];
 
-// Function called when the "!randomfact" command is issued
-function randomfactCommand(target, client) {
-    const fact = rndfact();
-    client.say(target, `${fact}`);
-}
+// Create a new Random instance
+const random = new Random();
 
 // Function called when the "!randomfact" command is issued
-function rndfact () {
-    const rndNum = Math.floor(Math.random () * listOfFacts.length);
-    const facts = listOfFacts[rndNum].Fact;
-    return facts;
+function randomfactCommand(target, client) {
+  const fact = rndfact();
+  client.say(target, `${fact}`);
+}
+
+// Function to generate a random fact
+function rndfact() {
+  const rndNum = random.integer(0, listOfFacts.length - 1);
+  const facts = listOfFacts[rndNum].Fact;
+  return facts;
 }
 
 module.exports = {
-    randomfactCommand,
+  randomfactCommand,
 };

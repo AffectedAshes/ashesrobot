@@ -1,6 +1,7 @@
 // metronome.js
 
 const { sanitizeInput } = require('../handlers/sanitizer');
+const { Random } = require('random-js');
 
 //Pokemon Moves Gen 1
 const listOfMoves = [
@@ -172,6 +173,9 @@ const listOfMoves = [
 
   ];
 
+// Create a new Random instance
+const random = new Random();
+
 // Function called when the "!metronome" command is issued
 function metronomeCommand(target, client, context, msg) {
   const sanitizedMsg = sanitizeInput(msg); // Sanitize user input
@@ -185,9 +189,9 @@ function metronomeCommand(target, client, context, msg) {
   }
 }
 
-// Function called when the "!metronome" command is issued
+// Function to generate a random move
 function rndmove() {
-  const rndNum = Math.floor(Math.random() * listOfMoves.length);
+  const rndNum = random.integer(0, listOfMoves.length - 1);
   const move = listOfMoves[rndNum].Move;
   return move;
 }

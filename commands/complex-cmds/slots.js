@@ -1,8 +1,10 @@
 // slots.js
 
+const { Random } = require('random-js');
+
 // Function called when the "slots" command is issued
 function playSlots(target, client, context) {
-    const emotes = [
+  const emotes = [
       'Kappa',
       'affect23Pray',
       'affect23Love',
@@ -38,23 +40,27 @@ function playSlots(target, client, context) {
       'FrankerZ',
       'KevinTurtle',
       'affect23Jam'
-    ];
+  ];
   
-    const pickedEmotes = [];
-    for (let i = 0; i < 3; i++) {
-      const randomIndex = Math.floor(Math.random() * emotes.length);
-      const randomEmote = emotes[randomIndex];
-      pickedEmotes.push(randomEmote);
-    }
+  // Create a new Random instance
+  const random = new Random();
   
-    const emoteString = pickedEmotes.join(' | ');
-    client.say(target, `@${context.username} -> ${emoteString}`);
-  
-    if (pickedEmotes.every((emote) => emote === pickedEmotes[0])) {
-      client.say(target, `@${context.username} Congrats, you won Slots!`);
-    }
+  const pickedEmotes = [];
+
+  for (let i = 0; i < 3; i++) {
+    const randomIndex = random.integer(0, emotes.length - 1);
+    const randomEmote = emotes[randomIndex];
+    pickedEmotes.push(randomEmote);
   }
 
-  module.exports = {
-    playSlots
-  };
+  const emoteString = pickedEmotes.join(' | ');
+  client.say(target, `@${context.username} -> ${emoteString}`);
+
+  if (pickedEmotes.every((emote) => emote === pickedEmotes[0])) {
+    client.say(target, `@${context.username} Congrats, you won Slots!`);
+  }
+}
+
+module.exports = {
+  playSlots,
+};

@@ -1,6 +1,10 @@
 // roll.js
 
 const { sanitizeInput } = require('../handlers/sanitizer');
+const { Random } = require('random-js');
+
+// Create a new Random instance
+const random = new Random();
 
 // Function called when the "!roll" command is issued
 function rollCommand(target, client, context, msg) {
@@ -19,7 +23,7 @@ function rollCommand(target, client, context, msg) {
 // Function called when the "roll" command is issued
 function rollDice() {
   const sides = 4096;
-  return Math.floor(Math.random() * sides) + 1;
+  return random.integer(1, sides);
 }
 
 module.exports = {

@@ -3,6 +3,7 @@
 const HangmanGame = require('./hangmanGame');
 
 const { sanitizeInput } = require('../handlers/sanitizer');
+const { Random } = require('random-js');
 
 const hangmanChannels = {};
 const hangmanCooldowns = {}; // Store cooldown timestamps for !hangman command
@@ -169,7 +170,10 @@ function startHangman(target, client) {
     "Jielefe"
   ];
 
-  const randomWord = words[Math.floor(Math.random() * words.length)];
+  // Create a new Random instance
+  const random = new Random();
+
+  const randomWord = words[random.integer(0, words.length - 1)];
   hangmanChannels[target] = {
     game: new HangmanGame(randomWord),
     lastGuessTime: Date.now(),

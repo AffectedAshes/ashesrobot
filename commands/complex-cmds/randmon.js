@@ -1,6 +1,7 @@
 // randmon.js
 
 const { sanitizeInput } = require('../handlers/sanitizer');
+const { Random } = require('random-js');
 
 //Pokemon Gen 1
 const listOfMons = [
@@ -159,26 +160,29 @@ const listOfMons = [
     
   ];
 
+// Create a new Random instance
+const random = new Random();
+
 // Function called when the "!randmon" command is issued
 function randmonCommand(target, client, context, msg) {
   const sanitizedMsg = sanitizeInput(msg); // Sanitize user input
-  
+
   const mon = rndmon();
   client.say(target, `${mon}`);
-  
+
   const userMon = sanitizedMsg.toLowerCase().replace(/^!randmon\s+/, "");
   if (userMon === mon.toLowerCase()) {
     client.say(target, `@${context.username} Congrats, you won Randmon!`);
   }
 }
-  
-// Function called when the "!randmon command is issued
+
+// Function to generate a random Pokemon
 function rndmon() {
-  const rndNum = Math.floor(Math.random() * listOfMons.length);
-  const mons = listOfMons[rndNum].Mon;
-  return mons;
+  const rndNum = random.integer(0, listOfMons.length - 1);
+  const mon = listOfMons[rndNum].Mon;
+  return mon;
 }
-  
+
 module.exports = {
   randmonCommand,
 };

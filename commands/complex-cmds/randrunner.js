@@ -1,5 +1,7 @@
 // randrunner.js
 
+const { Random } = require('random-js');
+
 const runner_list = [
   "Amoeba UK",
   "Exari onU",
@@ -157,6 +159,9 @@ const runner_list = [
   "Jie lefe"
 ];
 
+// Create a new Random instance
+const random = new Random();
+
 // Function called when the "!randrunner" command is issued
 function randrunnerCommand(target, client, context) {
   const start = getRandomNamePart(runner_list);
@@ -168,9 +173,9 @@ function randrunnerCommand(target, client, context) {
 
 // Helper function to get a random name part from the list
 function getRandomNamePart(nameList) {
-  const randomEntry = nameList[Math.floor(Math.random() * nameList.length)];
+  const randomEntry = random.pick(nameList);
   const randomNameParts = randomEntry.split(' ');
-  return randomNameParts[Math.floor(Math.random() * randomNameParts.length)];
+  return random.pick(randomNameParts);
 }
 
 module.exports = {
