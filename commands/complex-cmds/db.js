@@ -10,6 +10,22 @@ const db = new sqlite3.Database('./data/database.db', (err) => {
 });
 
 // Close the database connection when your bot is shutting down
+const handleExit = () => {
+    db.close((err) => {
+        if (err) {
+            console.error('Error closing database:', err.message);
+        } else {
+            console.log('Disconnected from the SQLite database');
+            process.exit(0);
+        }
+    });
+};
+
+// Handle both SIGINT and SIGTERM for graceful shutdown
+process.on('SIGINT', handleExit);
+process.on('SIGTERM', handleExit);
+
+// Close the database connection when your bot is shutting down
 process.on('SIGINT', () => {
     db.close((err) => {
         if (err) {
@@ -18,6 +34,17 @@ process.on('SIGINT', () => {
             console.log('Disconnected from the SQLite database');
             process.exit(0);
         }
+    });
+});
+
+// Heroku sends SIGTERM to indicate that the process should terminate
+process.on('SIGTERM', () => {
+    console.log('Received SIGTERM signal. Shutting down gracefully.');
+  
+    // Disconnect the Twitch client before exiting
+    client.disconnect().then(() => {
+      // Call the handleExit function to close the database
+      handleExit();
     });
 });
 
