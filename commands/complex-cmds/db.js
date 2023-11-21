@@ -40,12 +40,9 @@ process.on('SIGINT', () => {
 // Heroku sends SIGTERM to indicate that the process should terminate
 process.on('SIGTERM', () => {
     console.log('Received SIGTERM signal. Shutting down gracefully.');
-  
-    // Disconnect the Twitch client before exiting
-    client.disconnect().then(() => {
-      // Call the handleExit function to close the database
-      handleExit();
-    });
+    
+    // Call the handleExit function to close the database or perform other cleanup tasks
+    handleExit();
 });
 
 const { sanitizeInput } = require('../handlers/sanitizer');
