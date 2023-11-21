@@ -1,5 +1,14 @@
-The Bot doesnt have a command database yet, so no adding commands through Twitch Chat currently.
-It also cannot change the title or category of any other stream than my own for now.
+The Bot can only change the title or category of my stream for now.
+
+
+<b>Moderator only commands:</b>
+
+!addcmd <commandname> <response> -> add a new command
+
+!editcmd <commandname> <newresponse> -> edit an existing command
+
+!delcmd <commandname> -> delete an existing command
+
 
 <b>Main Commands are:</b>
 
