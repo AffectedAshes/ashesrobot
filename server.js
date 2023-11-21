@@ -8,6 +8,9 @@ const commandList = require('./commands/handlers/commandList');
 const cooldowns = {}; // Cooldowns object to track command cooldowns  
 const { isOnCooldown, getRemainingCooldown, setCooldown } = require('./commands/handlers/cooldown');   
 
+// Import the database functions
+const { getCommandFromDatabase } = require('./commands/complex-cmds/db');
+
 // Define configuration options
 const opts = {
   identity: {
@@ -28,24 +31,21 @@ client.on('connected', onConnectedHandler);
 // Connect to Twitch:
 client.connect();
 
-// Called every time a message comes in
 function onMessageHandler(target, context, msg, self) {
   if (self) {
     return; // Ignore messages from the bot
   }
 
-  // Remove non-printable characters after the command name
   const commandName = msg.replace(/[^ -~]+$/, '').trim();
 
-  // Iterate over the command list
   for (const [command, data] of Object.entries(commandList)) {
     if (commandName.startsWith(command)) {
       const { cooldown, cooldownDuration } = data;
       if (cooldown && isOnCooldown(context.username, command, cooldowns)) {
         const remainingCooldown = getRemainingCooldown(context.username, command, cooldowns);
-        //client.say(target, `@${context.username}, ${command} is still ${remainingCooldown} seconds on cooldown.`); // Inform the user about the remaining cooldown time
+        //client.say(target, `@${context.username}, ${command} is still ${remainingCooldown} seconds on cooldown.`);
       } else {
-        data.execute(target, client, context, msg); // Pass `msg` and `context` to the command function
+        data.execute(target, client, context, msg);
         if (cooldown) {
           setCooldown(context.username, command, cooldowns, cooldownDuration);
         }
@@ -53,6 +53,18 @@ function onMessageHandler(target, context, msg, self) {
       }
     }
   }
+
+  // Check if the command is in the database
+  getCommandFromDatabase(target, commandName)
+    .then(databaseCommand => {
+      if (databaseCommand) {
+        client.say(target, databaseCommand.response);
+        console.log(`* Executed ${commandName} command from the database`);
+      }
+    })
+    .catch(error => {
+      console.error('Error handling database command:', error.message);
+    });
 }
 
 // Called every time the bot connects to Twitch chat
