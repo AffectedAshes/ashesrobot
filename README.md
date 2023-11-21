@@ -3,11 +3,11 @@ The Bot can only change the title or category of my stream for now.
 
 <b>Moderator only commands:</b>
 
-!addcmd <commandname> <response> -> add a new command
+!addcmd [commandname] <response> -> add a new command
 
-!editcmd <commandname> <newresponse> -> edit an existing command
+!editcmd [commandname] <newresponse> -> edit an existing command
 
-!delcmd <commandname> -> delete an existing command
+!delcmd [commandname] -> delete an existing command
 
 
 <b>Main Commands are:</b>
