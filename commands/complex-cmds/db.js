@@ -25,7 +25,17 @@ const { sanitizeInput } = require('../handlers/sanitizer');
 
 function addCommand(target, msg, username, callback) {
     // Extract commandname and response from the message
-    const [, commandname, response] = msg.split(' ');
+    const match = /^!addcmd (\S+) (.+)/.exec(msg);
+    
+    if (!match) {
+        // If the message doesn't match the expected format, notify the user
+        if (callback && typeof callback === 'function') {
+            callback('Invalid command format. Please use: !addcmd <commandname> <response>');
+        }
+        return;
+    }
+
+    const [, commandname, response] = match;
 
     // Remove # in front of the channel name
     const cleanedTarget = target.replace(/^#/, '');
@@ -70,7 +80,17 @@ function addCommand(target, msg, username, callback) {
 
 function editCommand(target, msg, username, callback) {
     // Extract commandname and newResponse from the message
-    const [, commandname, newResponse] = msg.split(' ');
+    const match = /^!editcmd (\S+) (.+)/.exec(msg);
+
+    if (!match) {
+        // If the message doesn't match the expected format, notify the user
+        if (callback && typeof callback === 'function') {
+            callback('Invalid command format. Please use: !editcmd <commandname> <newResponse>');
+        }
+        return;
+    }
+
+    const [, commandname, newResponse] = match;
 
     // Remove # in front of the channel name
     const cleanedTarget = target.replace(/^#/, '');
@@ -79,9 +99,9 @@ function editCommand(target, msg, username, callback) {
     const sanitizedCommandname = sanitizeInput(commandname);
     const sanitizedNewResponse = sanitizeInput(newResponse);
 
-     // Edit an existing command in the database only if the channel matches
-     const query = 'SELECT * FROM commands WHERE commandname = ? AND channel = ?';
-     db.get(query, [sanitizedCommandname, cleanedTarget], function (err, result) {
+    // Edit an existing command in the database only if the channel matches
+    const query = 'SELECT * FROM commands WHERE commandname = ? AND channel = ?';
+    db.get(query, [sanitizedCommandname, cleanedTarget], function (err, result) {
         if (err) {
             console.error('Error checking command:', err.message);
             if (callback && typeof callback === 'function') {
@@ -112,7 +132,17 @@ function editCommand(target, msg, username, callback) {
 
 function deleteCommand(target, msg, username, callback) {
     // Extract commandname from the message
-    const [, commandname] = msg.split(' ');
+    const match = /^!delcmd (\S+)/.exec(msg);
+
+    if (!match) {
+        // If the message doesn't match the expected format, notify the user
+        if (callback && typeof callback === 'function') {
+            callback('Invalid command format. Please use: !delcmd <commandname>');
+        }
+        return;
+    }
+
+    const [, commandname] = match;
 
     // Remove # in front of the channel name
     const cleanedTarget = target.replace(/^#/, '');
@@ -120,7 +150,6 @@ function deleteCommand(target, msg, username, callback) {
     // Sanitize input
     const sanitizedCommandname = sanitizeInput(commandname);
 
-   
     // Delete a command from the database only if the channel matches
     const query = 'SELECT * FROM commands WHERE commandname = ? AND channel = ?';
     db.get(query, [sanitizedCommandname, cleanedTarget], function (err, result) {
