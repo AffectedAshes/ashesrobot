@@ -1,49 +1,87 @@
 const sqlite3 = require('sqlite3').verbose();
+const fs = require('fs');
+const AWS = require('aws-sdk');
 
-// Use the environment variable for the password
-const db = new sqlite3.Database('./data/database.db', (err) => {
-    if (err) {
-        console.error('Error opening database:', err.message);
-    } else {
-        console.log('Connected to the SQLite database');
-    }
+// Set your AWS credentials and region
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
 });
+
+const s3 = new AWS.S3();
+
+// Establish a connection to the database
+const db = new sqlite3.Database('./data/database.db', (err) => {
+  if (err) {
+    console.error('Error opening database:', err.message);
+  } else {
+    console.log('Connected to the SQLite database');
+  }
+});
+
+// Backup and upload the database to S3 on SIGTERM
+process.on('SIGTERM', () => {
+  console.log('Received SIGTERM signal. Shutting down gracefully.');
+
+  // Backup the database
+  const backupData = fs.readFileSync('./data/database.db');
+  const backupParams = {
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key: 'database_backup.db', // Change this line to save to the root of your S3 bucket
+    Body: backupData,
+  };
+
+  // Upload the backup to S3
+  s3.upload(backupParams, (uploadErr, uploadData) => {
+    if (uploadErr) {
+      console.error('Error uploading backup to S3:', uploadErr.message);
+    } else {
+      console.log('Backup uploaded to S3:', uploadData.Location);
+      // Call the handleExit function to close the database or perform other cleanup tasks
+      handleExit();
+    }
+  });
+});
+
+// Restore the database on bot startup
+restoreDatabase();
 
 // Close the database connection when your bot is shutting down
 const handleExit = () => {
-    db.close((err) => {
-        if (err) {
-            console.error('Error closing database:', err.message);
-        } else {
-            console.log('Disconnected from the SQLite database');
-            process.exit(0);
-        }
-    });
+  db.close((err) => {
+    if (err) {
+      console.error('Error closing database:', err.message);
+    } else {
+      console.log('Disconnected from the SQLite database');
+      process.exit(0);
+    }
+  });
 };
 
-// Handle both SIGINT and SIGTERM for graceful shutdown
-process.on('SIGINT', handleExit);
-process.on('SIGTERM', handleExit);
+function restoreDatabase() {
+  // Check if there is a backup on S3
+  const restoreParams = {
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key: 'database_backup.db', // Change this line to read from the root of your S3 bucket
+  };
 
-// Close the database connection when your bot is shutting down
-process.on('SIGINT', () => {
-    db.close((err) => {
-        if (err) {
-            console.error('Error closing database:', err.message);
-        } else {
-            console.log('Disconnected from the SQLite database');
-            process.exit(0);
-        }
-    });
-});
-
-// Heroku sends SIGTERM to indicate that the process should terminate
-process.on('SIGTERM', () => {
-    console.log('Received SIGTERM signal. Shutting down gracefully.');
-    
-    // Call the handleExit function to close the database or perform other cleanup tasks
-    handleExit();
-});
+  s3.getObject(restoreParams, (restoreErr, restoreData) => {
+    if (restoreErr) {
+      if (restoreErr.code === 'NoSuchKey') {
+        // If there is no backup file, log a message and continue without restoring
+        console.log('No backup file found on S3. Starting with a fresh database.');
+      } else {
+        // Handle other errors
+        console.error('Error restoring database from S3:', restoreErr.message);
+      }
+    } else {
+      // Write the restored data to the local database file
+      fs.writeFileSync('./data/database.db', restoreData.Body);
+      console.log('Database restored from S3');
+    }
+  });
+}
 
 const { sanitizeInput } = require('../handlers/sanitizer');
 
