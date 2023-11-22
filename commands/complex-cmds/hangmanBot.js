@@ -178,7 +178,9 @@ function startHangman(target, client) {
     "Vadnika",
     "Cerpin",
     "prieR57",
-    "Noylls"
+    "Noylls",
+    "joylin728",
+    "Aspect"
   ];
 
   // Create a new Random instance
