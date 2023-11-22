@@ -22,35 +22,38 @@ const db = new sqlite3.Database('./data/database.db', (err) => {
 });
 
 // Handle both SIGINT and SIGTERM for graceful shutdown
-process.on('SIGINT', handleExit);
 process.on('SIGTERM', () => handleExit().then(() => process.exit(0)));
 
 // Close the database connection when your bot is shutting down
 async function handleExit() {
-  try {
-    // Backup the database
-    const backupData = fs.readFileSync('./data/database.db');
-    const backupParams = {
-      Bucket: process.env.S3_BUCKET_NAME,
-      Key: 'database.db',
-      Body: backupData,
-    };
-
-    // Upload the backup to S3
-    const uploadData = await s3.upload(backupParams).promise();
-    console.log('Backup uploaded to S3:', uploadData.Location);
-  } catch (uploadErr) {
-    console.error('Error uploading backup to S3:', uploadErr.message);
-  } finally {
-    // Close the database connection
-    db.close((err) => {
-      if (err) {
-        console.error('Error closing database:', err.message);
-      } else {
-        console.log('Disconnected from the SQLite database');
-      }
-    });
-  }
+    try {
+      // Backup the database
+      const backupData = fs.readFileSync('./data/database.db');
+      const backupParams = {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: 'database.db',
+        Body: backupData,
+      };
+  
+      // Upload the backup to S3
+      const uploadData = await s3.upload(backupParams).promise();
+      console.log('Backup uploaded to S3:', uploadData.Location);
+    } catch (uploadErr) {
+      console.error('Error uploading backup to S3:', uploadErr.message);
+    } finally {
+      // Close the database connection
+      db.close((err) => {
+        if (err) {
+          console.error('Error closing database:', err.message);
+        } else {
+          console.log('Disconnected from the SQLite database');
+        }
+  
+        // Set exitCode to delay process exit until asynchronous operations are done
+        process.exitCode = 0;
+        process.exit();
+      });
+    }
 }
 
 // Restore the database on bot startup
