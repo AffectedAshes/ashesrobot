@@ -1,14 +1,15 @@
-const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
 const AWS = require('aws-sdk');
+const sqlite3 = require('sqlite3').verbose();
 
-// Set your AWS credentials and region
+// Configure AWS SDK
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 });
 
+// Create an S3 object
 const s3 = new AWS.S3();
 
 // Establish a connection to the database
@@ -20,6 +21,10 @@ const db = new sqlite3.Database('./data/database.db', (err) => {
   }
 });
 
+// Handle both SIGINT and SIGTERM for graceful shutdown
+process.on('SIGINT', handleExit);
+process.on('SIGTERM', handleExit);
+
 // Backup and upload the database to S3 on SIGTERM
 process.on('SIGTERM', () => {
   console.log('Received SIGTERM signal. Shutting down gracefully.');
@@ -28,7 +33,7 @@ process.on('SIGTERM', () => {
   const backupData = fs.readFileSync('./data/database.db');
   const backupParams = {
     Bucket: process.env.S3_BUCKET_NAME,
-    Key: 'database_backup.db', // Change this line to save to the root of your S3 bucket
+    Key: 'database.db', // Change this line to save to the root of your S3 bucket
     Body: backupData,
   };
 
@@ -48,7 +53,7 @@ process.on('SIGTERM', () => {
 restoreDatabase();
 
 // Close the database connection when your bot is shutting down
-const handleExit = () => {
+function handleExit() {
   db.close((err) => {
     if (err) {
       console.error('Error closing database:', err.message);
@@ -57,13 +62,13 @@ const handleExit = () => {
       process.exit(0);
     }
   });
-};
+}
 
 function restoreDatabase() {
   // Check if there is a backup on S3
   const restoreParams = {
     Bucket: process.env.S3_BUCKET_NAME,
-    Key: 'database_backup.db', // Change this line to read from the root of your S3 bucket
+    Key: 'database.db', // Change this line to read from the root of your S3 bucket
   };
 
   s3.getObject(restoreParams, (restoreErr, restoreData) => {
