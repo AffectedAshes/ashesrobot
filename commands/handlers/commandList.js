@@ -105,7 +105,7 @@ const commandList = {
   },
   '!chatgpt': {
     cooldown: true,
-    cooldownDuration: 600,
+    cooldownDuration: 300,
     execute: processChatGPTCommand,
   },
   '!metronome': {
