@@ -1,71 +1,23 @@
-const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
 
-const dbName = 'database.db';
-const backupPath = './data/backups'; // Specify the path for storing backup files
-
-// Ensure the backup directory exists
-if (!fs.existsSync(backupPath)) {
-    fs.mkdirSync(backupPath);
-}
-
-// Connect to the SQLite database
-const db = new sqlite3.Database('./data/' + dbName, (err) => {
+// Use the environment variable for the password
+const db = new sqlite3.Database('./data/database.db', (err) => {
     if (err) {
-      console.error('Error opening database:', err.message);
-      process.exit(1);
+        console.error('Error opening database:', err.message);
     } else {
-      console.log('Connected to the SQLite database');
-        // Restore the database on bot startup
-        restoreDatabase();
+        console.log('Connected to the SQLite database');
     }
 });
 
-// Function to create a backup of the database
-const backupDatabase = () => {
-    const backupFileName = `backup_${Date.now()}_${dbName}`;
-    const backupFilePath = `${backupPath}/${backupFileName}`;
-  
-    fs.copyFileSync(`./data/${dbName}`, backupFilePath);
-    console.log(`Database backup completed: ${backupFileName}`);
-};
-
-// Function to restore the database from the latest backup
-const restoreDatabase = () => {
-    const latestBackup = getLatestBackup();
-    if (latestBackup) {
-      const backupFilePath = `${backupPath}/${latestBackup}`;
-      fs.copyFileSync(backupFilePath, `./data/${dbName}`);
-      console.log(`Database restored from backup: ${latestBackup}`);
-    } else {
-      console.log('No backup found. Starting with a fresh database.');
-    }
-};
-
-// Function to get the latest backup file
-const getLatestBackup = () => {
-    const files = fs.readdirSync(backupPath);
-    return files.reduce((latest, file) => {
-      if (!latest || fs.statSync(`${backupPath}/${file}`).mtime > fs.statSync(`${backupPath}/${latest}`).mtime) {
-        return file;
-      }
-      return latest;
-    }, null);
-};
-
 // Close the database connection when your bot is shutting down
 const handleExit = () => {
-    // Create a backup of the database
-    backupDatabase();
-  
     db.close((err) => {
-      if (err) {
-        console.error('Error closing database:', err.message);
-        process.exit(1);
-      } else {
-        console.log('Disconnected from the SQLite database');
-        process.exit(0);
-      }
+        if (err) {
+            console.error('Error closing database:', err.message);
+        } else {
+            console.log('Disconnected from the SQLite database');
+            process.exit(0);
+        }
     });
 };
 
@@ -73,16 +25,22 @@ const handleExit = () => {
 process.on('SIGINT', handleExit);
 process.on('SIGTERM', handleExit);
 
-// Close the database connection on SIGINT
+// Close the database connection when your bot is shutting down
 process.on('SIGINT', () => {
-    console.log('Received SIGINT signal. Shutting down gracefully.');
-    // Call the handleExit function to close the database or perform other cleanup tasks
-    handleExit();
+    db.close((err) => {
+        if (err) {
+            console.error('Error closing database:', err.message);
+        } else {
+            console.log('Disconnected from the SQLite database');
+            process.exit(0);
+        }
+    });
 });
 
 // Heroku sends SIGTERM to indicate that the process should terminate
 process.on('SIGTERM', () => {
     console.log('Received SIGTERM signal. Shutting down gracefully.');
+    
     // Call the handleExit function to close the database or perform other cleanup tasks
     handleExit();
 });
