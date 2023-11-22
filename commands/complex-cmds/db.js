@@ -23,7 +23,7 @@ const db = new sqlite3.Database('./data/database.db', (err) => {
 
 // Handle both SIGINT and SIGTERM for graceful shutdown
 process.on('SIGINT', handleExit);
-process.on('SIGTERM', handleExit);
+process.on('SIGTERM', () => handleExit().then(() => process.exit(0)));
 
 // Close the database connection when your bot is shutting down
 async function handleExit() {
@@ -48,7 +48,6 @@ async function handleExit() {
         console.error('Error closing database:', err.message);
       } else {
         console.log('Disconnected from the SQLite database');
-        process.exit(0);
       }
     });
   }
