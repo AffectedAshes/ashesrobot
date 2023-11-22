@@ -21,8 +21,14 @@ const db = new sqlite3.Database('./data/database.db', (err) => {
   }
 });
 
-// Handle both SIGINT and SIGTERM for graceful shutdown
-process.on('SIGTERM', () => handleExit().then(() => process.exit(0)));
+process.on('SIGTERM', handleExit);
+
+// Heroku sends SIGTERM to indicate that the process should terminate
+process.on('SIGTERM', () => {
+    console.log('Received SIGTERM signal. Shutting down gracefully.');
+    // Call the handleExit function to close the database or perform other cleanup tasks
+    handleExit();
+  });
 
 // Close the database connection when your bot is shutting down
 async function handleExit() {
