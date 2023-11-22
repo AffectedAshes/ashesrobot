@@ -156,7 +156,18 @@ const runner_list = [
   "Jad iwi",
   "Pra bxz",
   "Da kuuu",
-  "Jie lefe"
+  "Jie lefe",
+  "Flame _SR",
+  "Myst S4",
+  "Plot wyx",
+  "bahamut 3359",
+  "HE4T R4N",
+  "Beber Vorpal",
+  "Lucas PGLP",
+  "Vad nika",
+  "Cer pin",
+  "prie R57",
+  "Noy lls"
 ];
 
 // Create a new Random instance

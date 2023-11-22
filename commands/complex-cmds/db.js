@@ -44,7 +44,7 @@ function handleExit() {
   }
   
   // Perform periodic backup every 24 hours
-  const backupInterval = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+  const backupInterval = 12 * 60 * 60 * 1000; // 12 hours in milliseconds
   
   function performPeriodicBackup() {
     setInterval(async () => {

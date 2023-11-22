@@ -167,7 +167,18 @@ function startHangman(target, client) {
     "Jadiwi",
     "Prabxz",
     "Dakuuu",
-    "Jielefe"
+    "Jielefe",
+    "FlameSR",
+    "MystS4",
+    "Plotwyx",
+    "bahamut3359",
+    "HE4TR4N",
+    "BeberVorpal",
+    "LucasPGLP",
+    "Vadnika",
+    "Cerpin",
+    "prieR57",
+    "Noylls"
   ];
 
   // Create a new Random instance
