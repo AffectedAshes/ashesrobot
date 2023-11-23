@@ -23,50 +23,50 @@ const db = new sqlite3.Database('./data/database.db', (err) => {
 
 // Close the database connection when your bot is shutting down
 function handleExit() {
-    return new Promise(async (resolve) => {
-      try {
-        // Close the database connection
-        db.close((err) => {
-          if (err) {
-            console.error('Error closing database:', err.message);
-          } else {
-            console.log('Disconnected from the SQLite database');
-          }
+  return new Promise(async (resolve) => {
+    try {
+      // Close the database connection
+      db.close((err) => {
+        if (err) {
+          console.error('Error closing database:', err.message);
+        } else {
+          console.log('Disconnected from the SQLite database');
+        }
   
-          // Resolve the promise to indicate that the synchronous part is complete
-          resolve();
-        });
-      } catch (err) {
-        console.error('Error during shutdown:', err.message);
+        // Resolve the promise to indicate that the synchronous part is complete
         resolve();
-      }
-    });
-  }
+      });
+    } catch (err) {
+      console.error('Error during shutdown:', err.message);
+      resolve();
+    }
+  });
+}
   
-  // Perform periodic backup every 24 hours
-  const backupInterval = 12 * 60 * 60 * 1000; // 12 hours in milliseconds
+// Perform periodic backup every 6 hours
+const backupInterval = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
   
-  function performPeriodicBackup() {
-    setInterval(async () => {
-      try {
-        // Backup the database
-        const backupData = fs.readFileSync('./data/database.db');
-        const backupParams = {
-          Bucket: process.env.S3_BUCKET_NAME,
-          Key: 'database.db',
-          Body: backupData,
-        };
+function performPeriodicBackup() {
+  setInterval(async () => {
+    try {
+      // Backup the database
+      const backupData = fs.readFileSync('./data/database.db');
+      const backupParams = {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: 'database.db',
+        Body: backupData,
+      };
   
-        // Upload the backup to S3
-        const uploadData = await s3.upload(backupParams).promise();
-        console.log('Periodic backup uploaded to S3:', uploadData.Location);
-      } catch (uploadErr) {
-        console.error('Error uploading periodic backup to S3:', uploadErr.message);
-      }
-    }, backupInterval);
-  }
+      // Upload the backup to S3
+      const uploadData = await s3.upload(backupParams).promise();
+      console.log('Periodic backup uploaded to S3:', uploadData.Location);
+    } catch (uploadErr) {
+      console.error('Error uploading periodic backup to S3:', uploadErr.message);
+    }
+  }, backupInterval);
+}
   
-// Usage
+// Handle SIGTERM
 process.on('SIGTERM', async () => {
     console.log('Received SIGTERM signal. Starting graceful shutdown.');
     await handleExit();
