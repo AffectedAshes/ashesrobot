@@ -36,7 +36,7 @@ Hangman Minigame (5 minute cooldown between each hangman game)
 
 * `!guess <guess>`
   
-  for guessing a letter or thee full name
+  for guessing a letter or the full name
 
 ### Slots
 
