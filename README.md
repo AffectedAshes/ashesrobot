@@ -1,35 +1,93 @@
+# ashesrobot
+
 The Bot can only change the title or category of my stream for now.
 
+## Documentation
 
-<b>Moderator only commands:</b>
+Those are all the main commands which are enabled in every channel.
 
-!addcmd [commandname] [response] -> add a new command
+### Moderator only Commands
 
-!editcmd [commandname] [newresponse] -> edit an existing command
+Add, edit and delete (as long as they exist in the specific channel) commands with simple text responses.
 
-!delcmd [commandname] -> delete an existing command
+`!addcmd <commandname> <response>`
 
+`!editcmd <commandname> <newresponse>`
 
-<b>Main Commands are:</b>
+`!delcmd <commandname>`
 
-!chatgpt [prompt/question} -> give ChatGPT a specific prompt (can be a sentence too) or ask a question for example (10 minute cooldown per user)
+### Main Bot Commands
 
-!hangman -> Hangman Minigame (5 minute cooldown between each hangman game)
+The list of commands for every user with their inputs and cooldowns.
 
-!slots -> Emote Slots Minigame (60 second cooldown per user) 
+### ChatGPT
 
-!metronome [move] -> guess a random Gen 1 Pokemon Move (30 second cooldown per user) 
+Give ChatGPT a specific prompt (can be a sentence too) or ask a question for example (5 minute cooldown per user)
 
-!randmon [mon] -> guess a random Gen 1 Pokemon (30 second cooldown per user) 
+`!chatgpt <prompt>`
 
-!randomfact -> get a random fact (30 second cooldown per user) 
+### Hangman
 
-!roll [1-4096] -> guess a random number between 1-4096 (30 second cooldown per user) 
+Hangman Minigame (5 minute cooldown between each hangman game)
 
-!randrunner -> get a random runner name (30 second cooldown per user)
+* `!hangman`
+  
+  starts the mingame
 
-!define [word] -> get the definition from Urban Dictionary (30 second cooldown per user)
+* `!guess <guess>`
+  
+  for guessing a letter or thee full name
 
-!weather [city] -> get the current weather for x city (30 second cooldown per user) 
+### Slots
 
-!flail [current max HP] -> Flail Calculator for Gen 1-4
+Emote Slots Minigame (60 second cooldown per user) 
+
+`!slots`
+
+### Metronome
+
+Guess a random Gen 1 Pokemon Move (30 second cooldown per user)
+
+`!metronome <move>`
+
+### Randmon
+
+Guess a random Gen 1 Pokemon (30 second cooldown per user) 
+
+`!randmon <mon>`
+
+### Randrunner
+
+Get a random runner name (30 second cooldown per user)
+
+`!randrunner`
+
+### Roll
+
+Guess a random number between 1-4096 (30 second cooldown per user)
+
+`!randmon <1-4096>`
+
+### Define
+
+Get the definition from Urban Dictionary (30 second cooldown per user)
+
+`!define <word>`
+
+### Randomfact
+
+Get a random fact (30 second cooldown per user)
+
+`!randomfact`
+
+### Weather
+
+Get the current weather for x city (30 second cooldown per user) 
+
+`!weather <city>`
+
+### Flail
+
+Flail Calculator for Gen 1-4
+
+`!flail <current max hp>`
