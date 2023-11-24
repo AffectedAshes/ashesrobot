@@ -66,7 +66,7 @@ Get a random runner name (30 second cooldown per user)
 
 Guess a random number between 1-4096 (30 second cooldown per user)
 
-`!randmon <1-4096>`
+`!roll <1-4096>`
 
 ### Define
 
