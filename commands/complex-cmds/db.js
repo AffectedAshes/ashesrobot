@@ -1,16 +1,18 @@
+const { Upload } = require('@aws-sdk/lib-storage');
+const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
 const fs = require('fs');
-const AWS = require('aws-sdk');
+const { Readable } = require('stream');
+
 const sqlite3 = require('sqlite3').verbose();
 
-// Configure AWS SDK
-AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+// Configure AWS SDK v3
+const s3Client = new S3Client({
   region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
 });
-
-// Create an S3 object
-const s3 = new AWS.S3();
 
 // Establish a connection to the database
 const db = new sqlite3.Database('./data/database.db', (err) => {
@@ -43,23 +45,31 @@ function handleExit() {
   });
 }
   
-// Perform periodic backup every 6 hours
-const backupInterval = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
-  
-function performPeriodicBackup() {
+// Perform periodic backup every 2 hours
+const backupInterval = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+
+async function performPeriodicBackup() {
   setInterval(async () => {
     try {
       // Backup the database
       const backupData = fs.readFileSync('./data/database.db');
-      const backupParams = {
-        Bucket: process.env.S3_BUCKET_NAME,
-        Key: 'database.db',
-        Body: backupData,
-      };
-  
-      // Upload the backup to S3
-      const uploadData = await s3.upload(backupParams).promise();
-      console.log('Periodic backup uploaded to S3:', uploadData.Location);
+      const backupStream = new Readable();
+      backupStream.push(backupData);
+      backupStream.push(null);
+
+      const upload = new Upload({
+        client: s3Client,
+        params: {
+          Bucket: process.env.S3_BUCKET_NAME,
+          Key: 'database.db',
+          Body: backupStream,
+        },
+      });
+
+      // Execute the upload
+      await upload.done();
+
+      console.log('Periodic backup uploaded to S3');
     } catch (uploadErr) {
       console.error('Error uploading periodic backup to S3:', uploadErr.message);
     }
@@ -80,28 +90,34 @@ performPeriodicBackup();
 // Restore the database on bot startup
 restoreDatabase();
 
-function restoreDatabase() {
+async function restoreDatabase() {
   // Check if there is a backup on S3
   const restoreParams = {
     Bucket: process.env.S3_BUCKET_NAME,
-    Key: 'database.db', // Change this line to read from the root of your S3 bucket
+    Key: 'database.db',
   };
 
-  s3.getObject(restoreParams, (restoreErr, restoreData) => {
-    if (restoreErr) {
-      if (restoreErr.code === 'NoSuchKey') {
-        // If there is no backup file, log a message and continue without restoring
-        console.log('No backup file found on S3. Starting with a fresh database.');
-      } else {
-        // Handle other errors
-        console.error('Error restoring database from S3:', restoreErr.message);
-      }
+  try {
+    const response = await s3Client.send(new GetObjectCommand(restoreParams));
+    const readStream = response.Body;
+    const writeStream = fs.createWriteStream('./data/database.db');
+
+    // Pipe the S3 stream to the local file
+    readStream.pipe(writeStream);
+
+    // Wait for the stream to finish writing
+    await new Promise((resolve) => writeStream.on('finish', resolve));
+
+    console.log('Database restored from S3');
+  } catch (restoreErr) {
+    if (restoreErr.name === 'NoSuchKey') {
+      // If there is no backup file, log a message and continue without restoring
+      console.log('No backup file found on S3. Starting with a fresh database.');
     } else {
-      // Write the restored data to the local database file
-      fs.writeFileSync('./data/database.db', restoreData.Body);
-      console.log('Database restored from S3');
+      // Handle other errors
+      console.error('Error restoring database from S3:', restoreErr.message);
     }
-  });
+  }
 }
 
 const { sanitizeInput } = require('../handlers/sanitizer');
