@@ -1,3 +1,5 @@
+//db.js
+
 const { Upload } = require('@aws-sdk/lib-storage');
 const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
 const fs = require('fs');
@@ -120,7 +122,7 @@ async function restoreDatabase() {
   }
 }
 
-const { sanitizeInput } = require('../handlers/sanitizer');
+const { sanitizeInput } = require('./sanitizer');
 
 function addCommand(target, msg, username, callback) {
     // Extract commandname and response from the message
@@ -335,11 +337,14 @@ function getCommandFromDatabase(target, commandName) {
         }
       });
     });
-  }
+}
+
+const default_cooldown_duration = 5; // Default cooldown duration in seconds for database commands
   
 module.exports = { 
     addCommand,
     editCommand,
     deleteCommand,
     getCommandFromDatabase,
+    default_cooldown_duration
 };

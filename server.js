@@ -8,8 +8,8 @@ const commandList = require('./commands/handlers/commandList');
 const cooldowns = {}; // Cooldowns object to track command cooldowns  
 const { isOnCooldown, getRemainingCooldown, setCooldown } = require('./commands/handlers/cooldown');   
 
-// Import the database functions
-const { getCommandFromDatabase } = require('./commands/complex-cmds/db');
+// Import the database
+const { getCommandFromDatabase, default_cooldown_duration } = require('./commands/handlers/db');
 
 // Define configuration options
 const opts = {
@@ -58,8 +58,15 @@ function onMessageHandler(target, context, msg, self) {
   getCommandFromDatabase(target, commandName)
     .then(databaseCommand => {
       if (databaseCommand) {
-        client.say(target, databaseCommand.response);
-        console.log(`* Executed ${commandName} command from the database`);
+        // Apply default cooldown for database commands
+        if (isOnCooldown(context.username, commandName, cooldowns)) {
+          const remainingCooldown = getRemainingCooldown(context.username, commandName, cooldowns);
+          // client.say(target, `@${context.username}, ${commandName} is still ${remainingCooldown} seconds on cooldown.`);
+        } else {
+          client.say(target, databaseCommand.response);
+          setCooldown(context.username, commandName, cooldowns, default_cooldown_duration);
+          console.log(`* Executed ${commandName} command from the database`);
+        }
       }
     })
     .catch(error => {

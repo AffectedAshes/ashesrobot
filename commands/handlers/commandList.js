@@ -1,6 +1,6 @@
 // commandList.js
 
-const { addCommand, editCommand, deleteCommand } = require('../complex-cmds/db');
+const { addCommand, editCommand, deleteCommand } = require('../handlers/db');
 const { changeStreamTitle, changeStreamGame } = require('../handlers/streamCommands');
 const { playSlots } = require('../complex-cmds/slots');
 const { handleHangmanCommands, setHangmanCooldown } = require('../complex-cmds/hangmanBot');
