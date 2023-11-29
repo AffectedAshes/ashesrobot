@@ -4,6 +4,10 @@ The Bot can only change the title or category of my stream for now.
 
 ## Documentation
 
+This command returns the link to this Github page.
+
+`!commands`
+
 Those are all the main commands which are enabled in every channel.
 
 ### Moderator only Commands
