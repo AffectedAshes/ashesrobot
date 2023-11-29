@@ -36,7 +36,7 @@ Hangman Minigame (5 minute cooldown between each hangman game)
 
 * `!guess <guess>`
   
-  for guessing a letter or thee full name
+  for guessing a letter or the full name
 
 ### Slots
 
@@ -66,7 +66,7 @@ Get a random runner name (30 second cooldown per user)
 
 Guess a random number between 1-4096 (30 second cooldown per user)
 
-`!randmon <1-4096>`
+`!roll <1-4096>`
 
 ### Define
 
