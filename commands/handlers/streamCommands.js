@@ -1,6 +1,6 @@
 // streamCommands.js
 
-const { updateStreamTitle, updateStreamGame, getGameIdFromTwitchApi } = require('../handlers/streamUpdater');
+const { updateStreamTitle, updateStreamGame, getGameIdFromTwitchApi } = require('./streamUpdater');
 
 const { sanitizeInput } = require('./sanitizer');
 
