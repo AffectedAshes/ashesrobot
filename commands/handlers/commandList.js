@@ -1,6 +1,7 @@
 // commandList.js
 
-const { addCommand, editCommand, deleteCommand } = require('./db');
+const { hasPermission } = require('./permissions');
+const { addCommand, editCommand, deleteCommand, getAllCommands } = require('./db');
 const { changeStreamTitle, changeStreamGame } = require('./streamCommands');
 const { playSlots } = require('../complex-cmds/slots');
 const { handleHangmanCommands, setHangmanCooldown } = require('../complex-cmds/hangmanBot');
@@ -35,50 +36,55 @@ const { ezCommand } = require('../cmds/ez');
 const { noDudeCommand } = require('../cmds/nodude');
 const { yesDudeCommand } = require('../cmds/yesdude');
 
-// Function to check if user is in the channel list
-function isModeratorOrBroadcaster(context) {
-  const channelList = process.env.CHANNEL_LIST.split(",").map(channel => channel.toLowerCase());
-  return context.mod || channelList.includes(context.username.toLowerCase());
-}
-
 const commandList = {
   '!addcmd': {
     cooldown: false,
     execute: (target, client, context, msg) => {
-      // Check if the user is the streamer or a moderator
-      if (isModeratorOrBroadcaster(context)) {
+      // Check if the user is a moderator or broadcaster
+      if (hasPermission(context)) {
         addCommand(target, msg, context.username, (result) => {
           client.say(target, result);
         });
       } else {
-        client.say(target, `@${context.username}, you don't have permission to use this command.`);
+        client.say(target, `@${context.username} you don't have permission to use this command.`);
       }
     },
   },
   '!editcmd': {
     cooldown: false,
     execute: (target, client, context, msg) => {
-      // Check if the user is the streamer or a moderator
-      if (isModeratorOrBroadcaster(context)) {
+      // Check if the user is a moderator or broadcaster
+      if (hasPermission(context)) {
         editCommand(target, msg, context.username, (result) => {
           client.say(target, result);
         });
       } else {
-        client.say(target, `@${context.username}, you don't have permission to use this command.`);
+        client.say(target, `@${context.username} you don't have permission to use this command.`);
       }
     },
   },
   '!delcmd': {
     cooldown: false,
     execute: (target, client, context, msg) => {
-      // Check if the user is the streamer or a moderator
-      if (isModeratorOrBroadcaster(context)) {
+      // Check if the user is a moderator or broadcaster
+      if (hasPermission(context)) {
         deleteCommand(target, msg, context.username, (result) => {
           client.say(target, result);
         });
       } else {
-        client.say(target, `@${context.username}, you don't have permission to use this command.`);
+        client.say(target, `@${context.username} you don't have permission to use this command.`);
       }
+    },
+  },
+  '!cmds': {
+    cooldown: false,
+    execute: (target, client) => {
+      getAllCommands(target, (err, commandNames) => {
+        const response = commandNames.length
+          ? `Those are all commands added to the database for this channel: ${commandNames.join(', ')}`
+          : `There are no commands added to the database for this channel.`;
+        client.say(target, response);
+      });
     },
   },
   '!changetitle': {

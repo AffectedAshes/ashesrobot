@@ -312,6 +312,26 @@ function isValidChannel(channel, commandname, callback) {
     }
 }
 
+function getAllCommands(target, callback) {
+  // Remove # in front of the channel name
+  const cleanedTarget = target.replace(/^#/, '');
+
+  const query = 'SELECT commandname FROM commands WHERE channel = ?';
+  db.all(query, [cleanedTarget], function (err, rows) {
+    if (err) {
+      console.error('Error fetching commands:', err.message);
+      if (callback && typeof callback === 'function') {
+        callback(`Error fetching commands: ${err.message}`);
+      }
+    } else {
+      const commandNames = rows.map(row => row.commandname);
+      if (callback && typeof callback === 'function') {
+        callback(null, commandNames);
+      }
+    }
+  });
+}
+
 function getCommandFromDatabase(target, commandName) {
     return new Promise((resolve, reject) => {
       // Remove # in front of the channel name
@@ -345,6 +365,7 @@ module.exports = {
     addCommand,
     editCommand,
     deleteCommand,
+    getAllCommands,
     getCommandFromDatabase,
     default_cooldown_duration
 };

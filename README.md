@@ -20,6 +20,12 @@ Add, edit and delete (as long as they exist in the specific channel) commands wi
 
 `!delcmd <commandname>`
 
+### Database
+
+This command lists all commands which are added to the database for the specific channel it gets used in.
+
+`!cmds`
+
 ### Main Bot Commands
 
 The list of commands for every user with their inputs and cooldowns.
