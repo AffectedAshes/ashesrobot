@@ -19,7 +19,7 @@ async function defineCommand(target, client, context, msg) {
     const data = response.data;
 
     if (data.list && data.list.length > 0) {
-      const shortEnoughDefinitions = data.list.filter(definitionData => definitionData.definition.length <= 750);
+      const shortEnoughDefinitions = data.list.filter(definitionData => definitionData.definition.length <= 500);
 
       if (shortEnoughDefinitions.length > 0) {
         const chosenDefinition = rndDefinition(shortEnoughDefinitions);

@@ -42,10 +42,16 @@ function onMessageHandler(target, context, msg, self) {
     if (commandName.startsWith(command)) {
       const { cooldown, cooldownDuration } = data;
       if (cooldown && isOnCooldown(context.username, command, cooldowns)) {
-        const remainingCooldown = getRemainingCooldown(context.username, command, cooldowns);
-        //client.say(target, `@${context.username}, ${command} is still ${remainingCooldown} seconds on cooldown.`);
+        if (command === '!chatgpt') {
+          // For !chatgpt, reply with remaining cooldown
+          const remainingCooldown = getRemainingCooldown(context.username, command, cooldowns);
+          client.say(target, `@${context.username}, !chatgpt is still on cooldown. Remaining cooldown: ${remainingCooldown} seconds.`);
+        }
+        // const remainingCooldown = getRemainingCooldown(context.username, command, cooldowns);
+        // client.say(target, `@${context.username}, ${command} is still ${remainingCooldown} seconds on cooldown.`);
       } else {
-        data.execute(target, client, context, msg);
+        // Execute the command and set cooldown if applicable
+        data.execute(target, client, context, msg, cooldowns);
         if (cooldown) {
           setCooldown(context.username, command, cooldowns, cooldownDuration);
         }
