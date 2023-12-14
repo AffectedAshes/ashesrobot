@@ -19,7 +19,7 @@ function playSlots(target, client, context) {
       'Jebaited',
       'BibleThump',
       'MrDestructoid',
-      'rubent15Evil',
+      'rubent15ReallyBro',
       'FailFish',
       'HeyGuys',
       'rubent15Think',
