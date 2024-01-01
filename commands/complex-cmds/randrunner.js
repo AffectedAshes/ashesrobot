@@ -153,7 +153,6 @@ const runner_list = [
   "war tab",
   "ta his9",
   "Hypno shark",
-  "Jad iwi",
   "Pra bxz",
   "Da kuuu",
   "Jie lefe",

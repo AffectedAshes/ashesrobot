@@ -164,7 +164,6 @@ function startHangman(target, client) {
     "wartab",
     "tahis9",
     "Hypnoshark",
-    "Jadiwi",
     "Prabxz",
     "Dakuuu",
     "Jielefe",
