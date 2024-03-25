@@ -14,7 +14,6 @@ const runner_list = [
   "Swif talu",
   "scoa gogo",
   "Mach Wing",
-  "Kid rocker96",
   "driek iann",
   "edda ket",
   "Wh0mis DS",

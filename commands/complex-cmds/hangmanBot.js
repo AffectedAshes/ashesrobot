@@ -25,7 +25,6 @@ function startHangman(target, client) {
     "Swiftalu",
     "scoagogo",
     "MachWing",
-    "Kidrocker96",
     "driekiann",
     "eddaket",
     "Wh0misDS",
