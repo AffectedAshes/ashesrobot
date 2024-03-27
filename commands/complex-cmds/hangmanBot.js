@@ -233,6 +233,12 @@ function setHangmanCooldown(target, client) {
   }, 5 * 60 * 1000); // 5 minutes
 }
 
+// Initialize cooldown timestamp for hangman already active response
+let lastHangmanActiveResponseTime = 0;
+
+// Initialize cooldown timestamp for hangman not active response
+let lastHangmanResponseTime = 0;
+
 function handleHangmanCommands(target, client, context, msg) {
   const hangmanChannel = hangmanChannels[target];
   const sanitizedMsg = sanitizeInput(msg); // Sanitize user input
@@ -246,11 +252,23 @@ function handleHangmanCommands(target, client, context, msg) {
     } else if (!hangmanChannel || !hangmanChannel.cooldown) {
       startHangman(target, client);
     } else {
-      client.say(target, 'Hangman game is already active. Use !guess to play.');
+      const now = Date.now();
+      const cooldown = 60000; // 1 minute cooldown
+
+      if (now - lastHangmanActiveResponseTime >= cooldown) {
+        client.say(target, 'Hangman game is already active. Use !guess to play.');
+        lastHangmanActiveResponseTime = now;
+      }
     }
   } else if (guessMatch) {
     if (!hangmanChannel || !hangmanChannel.game) {
-      client.say(target, 'Hangman is currently not active.');
+      const now = Date.now();
+      const cooldown = 60000; // 1 minute cooldown
+
+      if (now - lastHangmanResponseTime >= cooldown) {
+        client.say(target, 'Hangman is currently not active.');
+        lastHangmanResponseTime = now;
+      }
     } else {
       hangmanChannel.lastGuessTime = Date.now(); // Update the last guess time
 
@@ -277,14 +295,6 @@ function handleHangmanCommands(target, client, context, msg) {
         client.say(target, `@${context.username} Please guess one letter or the full runner's name.`);
       }
     }
-  //} else {
-    // Check for inactivity
-    //if (hangmanChannel && hangmanChannel.game && !hangmanChannel.cooldown) {
-      //const currentTime = Date.now();
-      //if (currentTime - hangmanChannel.lastGuessTime >= 5 * 60 * 1000) {
-        //endHangman(target, client, 'inactivity');
-      //}
-    //}
   }
 }
 
