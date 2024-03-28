@@ -178,7 +178,8 @@ function startHangman(target, client) {
     "prieR57",
     "Noylls",
     "joylin728",
-    "Aspect"
+    "Aspect",
+    "Grogir"
   ];
 
   // Create a new Random instance
@@ -195,7 +196,7 @@ function startHangman(target, client) {
 
   const timeoutId = setTimeout(() => {
     endHangman(target, client, 'inactivity');
-  }, 15 * 60 * 1000); // 15 minutes timeout for inactivity
+  }, 1 * 60 * 1000); // 15 minutes timeout for inactivity
 
   hangmanChannels[target].timeoutId = timeoutId; // Store the timeout ID for this channel
 }
@@ -209,7 +210,7 @@ function endHangman(target, client, reason) {
   const originalWord = hangmanGame.originalWord;
 
   if (reason === 'inactivity') {
-    client.say(target, `Hangman game was running for too long. Next time try to be faster :). Next round starts in 5 minutes.`);
+    client.say(target, `Hangman game was running for too long. Next time try to be faster :). The runner was: ${originalWord}. Next round starts in 5 minutes.`);
   } else {
     client.say(target, `Hangman round over! You ${result}. The runner was: ${originalWord}. Next round starts in 5 minutes.`);
   }
