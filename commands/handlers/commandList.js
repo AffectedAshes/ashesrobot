@@ -106,7 +106,8 @@ const commandList = {
     postExecute: setHangmanCooldown, //instead use the global cooldown for !hangman
   },
   '!guess': {
-    cooldown: false, 
+    cooldown: true,
+    cooldownDuration: 15,
     execute: handleHangmanCommands,
   },
   '!chatgpt': {
