@@ -107,7 +107,7 @@ const commandList = {
   },
   '!guess': {
     cooldown: true,
-    cooldownDuration: 15,
+    cooldownDuration: 5,
     execute: handleHangmanCommands,
   },
   '!chatgpt': {
