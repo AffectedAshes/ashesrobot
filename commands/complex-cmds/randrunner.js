@@ -167,7 +167,8 @@ const runner_list = [
   "prie R57",
   "Noy lls",
   "joy lin728",
-  "As pect"
+  "As pect",
+  "Gro gir"
 ];
 
 // Create a new Random instance
