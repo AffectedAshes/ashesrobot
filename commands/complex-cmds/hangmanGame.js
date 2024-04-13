@@ -2,10 +2,10 @@
 
 class HangmanGame {
   constructor(word) {
-    this.word = word.toLowerCase();
+    this.word = word.toLowerCase().replace(/\s/g, ''); // Remove any spaces from the word
     this.originalWord = word; // Store the original word from the list
     this.guesses = [];
-    this.attempts = 14;
+    this.attempts = 15;
     this.hiddenWord = this.hideWord();
   }
 
