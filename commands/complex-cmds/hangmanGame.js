@@ -2,7 +2,7 @@
 
 class HangmanGame {
   constructor(word) {
-    this.word = word.toLowerCase().replace(/\s/g, ''); // Remove any spaces from the word
+    this.word = word.toLowerCase(); // Store the original word from the list
     this.originalWord = word; // Store the original word from the list
     this.guesses = [];
     this.attempts = 15;
@@ -10,7 +10,13 @@ class HangmanGame {
   }
 
   hideWord() {
-    return this.word.split('').map(letter => (this.guesses.includes(letter) ? letter : '_')).join(' ');
+    return this.word.split('').map(letter => {
+      if (letter === ' ') {
+        return '|'; // Replace spaces with "|"
+      } else {
+        return (this.guesses.includes(letter) ? letter : '_');
+      }
+    }).join(' ');
   }
 
   guess(letter) {
