@@ -149,7 +149,7 @@ function handleHangmanCommands(target, client, context, msg) {
           client.say(target, `@${context.username} You already guessed ${guess} .`);
         }
       } else {
-        client.say(target, `@${context.username} Please guess one letter or the full word.`);
+        client.say(target, `@${context.username} Please guess one letter or the correct word.`);
       }
     }
   }

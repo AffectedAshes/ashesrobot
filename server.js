@@ -36,10 +36,10 @@ function onMessageHandler(target, context, msg, self) {
     return; // Ignore messages from the bot
   }
 
-  const commandName = msg.replace(/[^ -~]+$/, '').trim();
+  const commandPrefix = msg.trim().split(' ')[0]; // Extract the command prefix from the message
 
   for (const [command, data] of Object.entries(commandList)) {
-    if (commandName.startsWith(command)) {
+    if (command === commandPrefix) { // Check if the command exactly matches the command prefix
       const { cooldown, cooldownDuration } = data;
       if (cooldown && isOnCooldown(context.username, command, cooldowns)) {
         if (command === '!chatgpt') {
@@ -55,23 +55,24 @@ function onMessageHandler(target, context, msg, self) {
         if (cooldown) {
           setCooldown(context.username, command, cooldowns, cooldownDuration);
         }
-        console.log(`* Executed ${commandName} command`);
+        console.log(`* Executed ${commandPrefix} command`);
       }
+      return; // Exit the loop after executing the command
     }
   }
 
   // Check if the command is in the database
-  getCommandFromDatabase(target, commandName)
+  getCommandFromDatabase(target, commandPrefix)
     .then(databaseCommand => {
       if (databaseCommand) {
         // Apply default cooldown for database commands
-        if (isOnCooldown(context.username, commandName, cooldowns)) {
-          const remainingCooldown = getRemainingCooldown(context.username, commandName, cooldowns);
-          // client.say(target, `@${context.username}, ${commandName} is still ${remainingCooldown} seconds on cooldown.`);
+        if (isOnCooldown(context.username, commandPrefix, cooldowns)) {
+          const remainingCooldown = getRemainingCooldown(context.username, commandPrefix, cooldowns);
+          // client.say(target, `@${context.username}, ${commandPrefix} is still ${remainingCooldown} seconds on cooldown.`);
         } else {
           client.say(target, databaseCommand.response);
-          setCooldown(context.username, commandName, cooldowns, default_cooldown_duration);
-          console.log(`* Executed ${commandName} command from the database`);
+          setCooldown(context.username, commandPrefix, cooldowns, default_cooldown_duration);
+          console.log(`* Executed ${commandPrefix} command from the database`);
         }
       }
     })
