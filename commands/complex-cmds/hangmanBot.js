@@ -901,7 +901,10 @@ function startHangman(target, client) {
     cooldown: true,
   };
 
-  client.say(target, response);
+  // Append hidden word to response
+  const finalResponse = `${response} Hidden word: ${hangmanChannels[target].game.hiddenWord}`;
+
+  client.say(target, finalResponse);
 
   const timeoutId = setTimeout(() => {
     endHangman(target, client, 'inactivity');
