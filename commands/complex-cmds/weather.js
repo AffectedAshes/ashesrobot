@@ -10,7 +10,7 @@ async function weatherCommand(target, client, context, msg) {
   const sanitizedMsg = sanitizeInput(msg);
 
   // Extract the city from the message
-  const cityMatch = sanitizedMsg.match(/^!weather\s+(.+)/);
+  const cityMatch = sanitizedMsg.toLowerCase().match(/^!weather\s+(.+)/);
 
   // Check if a valid city is provided
   if (cityMatch) {

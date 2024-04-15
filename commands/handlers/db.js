@@ -126,7 +126,7 @@ const { sanitizeInput } = require('./sanitizer');
 
 function addCommand(target, msg, username, callback) {
     // Extract commandname and response from the message
-    const match = /^!addcmd (\S+) (.+)/.exec(msg);
+    const match = /^!addcmd (\S+) (.+)/.exec(msg.toLowerCase());
     
     if (!match) {
         // If the message doesn't match the expected format, notify the user
@@ -181,7 +181,7 @@ function addCommand(target, msg, username, callback) {
 
 function editCommand(target, msg, username, callback) {
     // Extract commandname and newResponse from the message
-    const match = /^!editcmd (\S+) (.+)/.exec(msg);
+    const match = /^!editcmd (\S+) (.+)/.exec(msg.toLowerCase());
 
     if (!match) {
         // If the message doesn't match the expected format, notify the user
@@ -233,7 +233,7 @@ function editCommand(target, msg, username, callback) {
 
 function deleteCommand(target, msg, username, callback) {
     // Extract commandname from the message
-    const match = /^!delcmd (\S+)/.exec(msg);
+    const match = /^!delcmd (\S+)/.exec(msg.toLowerCase());
 
     if (!match) {
         // If the message doesn't match the expected format, notify the user
@@ -359,7 +359,7 @@ function getCommandFromDatabase(target, commandName) {
     });
 }
 
-const default_cooldown_duration = 5; // Default cooldown duration in seconds for database commands
+const default_cooldown_duration = 10; // Default cooldown duration in seconds for database commands
   
 module.exports = { 
     addCommand,

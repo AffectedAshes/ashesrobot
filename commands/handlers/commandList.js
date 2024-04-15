@@ -16,21 +16,11 @@ const { defineCommand } = require('../complex-cmds/define');
 const { flailCommand } = require('../complex-cmds/flail');
 const { commandCommand } = require('../cmds/commands');
 const { billyslotsCommand } = require('../cmds/billyslots');
-const { notslotsCommand } = require('../cmds/notslots');
-const { mudkipCommand } = require('../cmds/mudkip');
 const { amazina100Command } = require('../cmds/amazina100');
 const { rngCommand } = require('../cmds/rng');
 const { blursedCommand } = require('../cmds/blursed');
-const { gyroballCommand } = require('../cmds/gyroball');
-const { dragonsdenCommand } = require('../cmds/dragonsden');
-const { digCommand } = require('../cmds/dig');
-const { escargotCommand } = require('../cmds/escargot');
-const { fontCommand } = require('../cmds/font');
-const { trashCommand } = require('../cmds/trash');
 const { tenseSmashCommand } = require('../cmds/tenseSmash');
-const { tenseSmash2Command } = require('../cmds/tenseSmash2');
 const { proteinCommand } = require('../cmds/protein');
-const { bonkCommand } = require('../cmds/bonk');
 const { bruhCommand } = require('../cmds/bruh');
 const { ezCommand } = require('../cmds/ez');
 const { noDudeCommand } = require('../cmds/nodude');
@@ -77,14 +67,20 @@ const commandList = {
     },
   },
   '!cmds': {
-    cooldown: false,
-    execute: (target, client) => {
-      getAllCommands(target, (err, commandNames) => {
-        const response = commandNames.length
-          ? `Those are all commands added to the database for this channel: ${commandNames.join(', ')}`
-          : `There are no commands added to the database for this channel.`;
-        client.say(target, response);
-      });
+    cooldown: true,
+    cooldownDuration: 30,
+    execute: (target, client, context) => {
+      // Check if the user is a moderator or broadcaster
+      if (hasPermission(context)) {
+        getAllCommands(target, (err, commandNames) => {
+          const response = commandNames.length
+            ? `Those are all commands added to the database for this channel: ${commandNames.join(', ')}`
+            : `There are no commands added to the database for this channel.`;
+          client.say(target, response);
+        });
+      } else {
+        client.say(target, `@${context.username} you don't have permission to use this command.`);
+      }
     },
   },
   '!changetitle': {
@@ -151,11 +147,13 @@ const commandList = {
     execute: defineCommand,
   },
   '!flail': {
-    cooldown: false,
+    cooldown: true,
+    cooldownDuration: 5,
     execute: flailCommand,
   },
   '!commands': {
-    cooldown: false,
+    cooldown: true,
+    cooldownDuration: 10,
     execute: commandCommand,
   },
   '!billyslots': {
@@ -163,81 +161,49 @@ const commandList = {
     cooldownDuration: 30,
     execute: billyslotsCommand,
   },
-  '!notslots': {
-    cooldown: false,
-    execute: notslotsCommand,
-  },
-  '!mudkip': {
-    cooldown: false,
-    execute: mudkipCommand,
-  },
   '!amazina100': {
-    cooldown: false,
+    cooldown: true,
+    cooldownDuration: 10,
     execute: amazina100Command,
   },
   '!rng': {
-    cooldown: false,
+    cooldown: true,
+    cooldownDuration: 10,
     execute: rngCommand,
   },
   '!blursed': {
-    cooldown: false,
+    cooldown: true,
+    cooldownDuration: 10,
     execute: blursedCommand,
-  },
-  '!gyroball': {
-    cooldown: false,
-    execute: gyroballCommand,
-  },
-  '!dragonsden': {
-    cooldown: false,
-    execute: dragonsdenCommand,
-  },
-  '!dig': {
-    cooldown: false,
-    execute: digCommand,
-  },
-  '!escargot': {
-    cooldown: false,
-    execute: escargotCommand,
-  },
-  '!font': {
-    cooldown: false,
-    execute: fontCommand,
-  },
-  '!trash': {
-    cooldown: false,
-    execute: trashCommand,
-  },
-  '!tenseSmash': {
-    cooldown: false,
-    execute: tenseSmashCommand,
   },
   'tenseSmash': {
     cooldown: true,
     cooldownDuration: 10,
-    execute: tenseSmash2Command,
+    execute: tenseSmashCommand,
   },
   'protein': {
-    cooldown: false,
+    cooldown: true,
+    cooldownDuration: 10,
     execute: proteinCommand,
   },
-  'affect23Bonk': {
-    cooldown: false,
-    execute: bonkCommand,
-  },
   'bruh': {
-    cooldown: false,
+    cooldown: true,
+    cooldownDuration: 10,
     execute: bruhCommand,
   },
   'ez': {
-    cooldown: false,
+    cooldown: true,
+    cooldownDuration: 10,
     execute: ezCommand,
   },
-  'no dude': {
-    cooldown: false,
+  'nd': {
+    cooldown: true,
+    cooldownDuration: 10,
     execute: noDudeCommand,
   },
-  'yes dude': {
-    cooldown: false,
+  'yd': {
+    cooldown: true,
+    cooldownDuration: 10,
     execute: yesDudeCommand,
   },
   // Add more commands as needed

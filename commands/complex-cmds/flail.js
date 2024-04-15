@@ -8,7 +8,7 @@ function flailCommand(target, client, context, msg) {
     // Sanitize user input
     const sanitizedMsg = sanitizeInput(msg);
 
-    const match = sanitizedMsg.match(/^!flail (\d+)/);
+    const match = sanitizedMsg.toLowerCase().match(/^!flail (\d+)/);
     if (match) {
       const maxHP = parseInt(match[1], 10);
       if (!isNaN(maxHP)) {

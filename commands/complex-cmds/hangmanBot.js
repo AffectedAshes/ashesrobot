@@ -19,7 +19,7 @@ function startHangman(target, client) {
   const wordLists = [
     {
       words: runners,
-      response: "Hangman game started with Pokémon Speedruners! Use !guess to guess a letter/number or the full runner's name."
+      response: "Hangman game started with Pokémon Speedrunners! Use !guess to guess a letter/number or the full runner's name."
     },
     {
       words: items,
@@ -100,8 +100,8 @@ function handleHangmanCommands(target, client, context, msg) {
   const hangmanChannel = hangmanChannels[target];
   const sanitizedMsg = sanitizeInput(msg); // Sanitize user input
 
-  const hangmanMatch = sanitizedMsg.match(/^!hangman/);
-  const guessMatch = sanitizedMsg.match(/^!guess (.+)/);
+  const hangmanMatch = sanitizedMsg.toLowerCase().match(/^!hangman/);
+  const guessMatch = sanitizedMsg.toLowerCase().match(/^!guess (.+)/);
 
   if (hangmanMatch) {
     if (hangmanCooldowns[target] && hangmanCooldowns[target] > Date.now()) {

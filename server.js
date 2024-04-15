@@ -36,16 +36,16 @@ function onMessageHandler(target, context, msg, self) {
     return; // Ignore messages from the bot
   }
 
-  const commandPrefix = msg.trim().split(' ')[0]; // Extract the command prefix from the message
+  const commandPrefix = msg.trim().split(' ')[0].toLowerCase(); // Extract the command prefix from the message and convert to lowercase
 
   for (const [command, data] of Object.entries(commandList)) {
-    if (command === commandPrefix) { // Check if the command exactly matches the command prefix
+    if (command.toLowerCase() === commandPrefix) { // Check if the lowercase command matches the lowercase command prefix
       const { cooldown, cooldownDuration } = data;
       if (cooldown && isOnCooldown(context.username, command, cooldowns)) {
         if (command === '!chatgpt') {
           // For !chatgpt, reply with remaining cooldown
           const remainingCooldown = getRemainingCooldown(context.username, command, cooldowns);
-          client.say(target, `@${context.username}, !chatgpt is still on cooldown. Remaining cooldown: ${remainingCooldown} seconds.`);
+          client.say(target, `@${context.username}, !chatgpt is still on cooldown for you. Remaining cooldown: ${remainingCooldown} seconds.`);
         }
         // const remainingCooldown = getRemainingCooldown(context.username, command, cooldowns);
         // client.say(target, `@${context.username}, ${command} is still ${remainingCooldown} seconds on cooldown.`);
@@ -61,18 +61,20 @@ function onMessageHandler(target, context, msg, self) {
     }
   }
 
+  const commandName = msg.trim().toLowerCase(); // Convert command name to lowercase
+
   // Check if the command is in the database
-  getCommandFromDatabase(target, commandPrefix)
+  getCommandFromDatabase(target, commandName)
     .then(databaseCommand => {
       if (databaseCommand) {
         // Apply default cooldown for database commands
-        if (isOnCooldown(context.username, commandPrefix, cooldowns)) {
-          const remainingCooldown = getRemainingCooldown(context.username, commandPrefix, cooldowns);
-          // client.say(target, `@${context.username}, ${commandPrefix} is still ${remainingCooldown} seconds on cooldown.`);
+        if (isOnCooldown(context.username, commandName, cooldowns)) {
+          // const remainingCooldown = getRemainingCooldown(context.username, commandName, cooldowns);
+          // client.say(target, `@${context.username}, ${commandName} is still ${remainingCooldown} seconds on cooldown.`);
         } else {
           client.say(target, databaseCommand.response);
-          setCooldown(context.username, commandPrefix, cooldowns, default_cooldown_duration);
-          console.log(`* Executed ${commandPrefix} command from the database`);
+          setCooldown(context.username, commandName, cooldowns, default_cooldown_duration);
+          console.log(`* Executed ${commandName} command from the database`);
         }
       }
     })
