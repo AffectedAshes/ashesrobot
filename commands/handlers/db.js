@@ -125,161 +125,161 @@ async function restoreDatabase() {
 const { sanitizeInput } = require('./sanitizer');
 
 function addCommand(target, msg, username, callback) {
-    // Extract commandname and response from the message
-    const match = /^!addcmd (\S+) (.+)/.exec(msg.toLowerCase());
-    
-    if (!match) {
-        // If the message doesn't match the expected format, notify the user
-        if (callback && typeof callback === 'function') {
-            callback('Invalid command format. Please use: !addcmd <commandname> <response>');
-        }
-        return;
-    }
+  // Extract commandname and response from the message
+  const match = /^!addcmd (\S+) (.+)/.exec(msg);
+  
+  if (!match) {
+      // If the message doesn't match the expected format, notify the user
+      if (callback && typeof callback === 'function') {
+          callback('Invalid command format. Please use: !addcmd <commandname> <response>');
+      }
+      return;
+  }
 
-    const [, commandname, response] = match;
+  const [, commandname, response] = match;
 
-    // Remove # in front of the channel name
-    const cleanedTarget = target.replace(/^#/, '');
+  // Remove # in front of the channel name
+  const cleanedTarget = target.replace(/^#/, '');
 
-    // Sanitize input
-    const sanitizedCommandname = sanitizeInput(commandname);
-    const sanitizedResponse = sanitizeInput(response);
+  // Sanitize input
+  const sanitizedCommandname = sanitizeInput(commandname);
+  const sanitizedResponse = sanitizeInput(response);
 
-    // Check if the command already exists in the database
-    const checkQuery = 'SELECT * FROM commands WHERE commandname = ? AND channel = ?';
-    db.get(checkQuery, [sanitizedCommandname, cleanedTarget], function (checkErr, checkResult) {
-        if (checkErr) {
-            console.error('Error checking command existence:', checkErr.message);
-            if (callback && typeof callback === 'function') {
-                callback(`Error adding command: ${checkErr.message}`);
-            }
-        } else if (checkResult) {
-            // Command with the same name already exists
-            console.log(`Command '${commandname}' already exists in channel: ${cleanedTarget}`);
-            if (callback && typeof callback === 'function') {
-                callback(`Command '${commandname}' already exists.`);
-            }
-        } else {
-            // Command does not exist, insert into the database
-            const insertQuery = 'INSERT INTO commands (commandname, response, channel) VALUES (?, ?, ?)';
-            db.run(insertQuery, [String(sanitizedCommandname), String(sanitizedResponse), String(cleanedTarget)], function (insertErr) {
-                if (insertErr) {
-                    console.error('Error adding command:', insertErr.message);
-                    if (callback && typeof callback === 'function') {
-                        callback(`Error adding command: ${insertErr.message}`);
-                    }
-                } else {
-                    console.log(`Command added: ${commandname} in channel: ${cleanedTarget}`);
-                    if (callback && typeof callback === 'function') {
-                        callback(`Command added: ${commandname}`);
-                    }
-                }
-            });
-        }
-    });
+  // Check if the command already exists in the database
+  const checkQuery = 'SELECT * FROM commands WHERE commandname = ? AND channel = ?';
+  db.get(checkQuery, [sanitizedCommandname, cleanedTarget], function (checkErr, checkResult) {
+      if (checkErr) {
+          console.error('Error checking command existence:', checkErr.message);
+          if (callback && typeof callback === 'function') {
+              callback(`Error adding command: ${checkErr.message}`);
+          }
+      } else if (checkResult) {
+          // Command with the same name already exists
+          console.log(`Command '${commandname}' already exists in channel: ${cleanedTarget}`);
+          if (callback && typeof callback === 'function') {
+              callback(`Command '${commandname}' already exists.`);
+          }
+      } else {
+          // Command does not exist, insert into the database
+          const insertQuery = 'INSERT INTO commands (commandname, response, channel) VALUES (?, ?, ?)';
+          db.run(insertQuery, [String(sanitizedCommandname), String(sanitizedResponse), String(cleanedTarget)], function (insertErr) {
+              if (insertErr) {
+                  console.error('Error adding command:', insertErr.message);
+                  if (callback && typeof callback === 'function') {
+                      callback(`Error adding command: ${insertErr.message}`);
+                  }
+              } else {
+                  console.log(`Command added: ${commandname} in channel: ${cleanedTarget}`);
+                  if (callback && typeof callback === 'function') {
+                      callback(`Command added: ${commandname}`);
+                  }
+              }
+          });
+      }
+  });
 }
 
 function editCommand(target, msg, username, callback) {
-    // Extract commandname and newResponse from the message
-    const match = /^!editcmd (\S+) (.+)/.exec(msg.toLowerCase());
+  // Extract commandname and newResponse from the message
+  const match = /^!editcmd (\S+) (.+)/.exec(msg);
 
-    if (!match) {
-        // If the message doesn't match the expected format, notify the user
-        if (callback && typeof callback === 'function') {
-            callback('Invalid command format. Please use: !editcmd <commandname> <newResponse>');
-        }
-        return;
-    }
+  if (!match) {
+      // If the message doesn't match the expected format, notify the user
+      if (callback && typeof callback === 'function') {
+          callback('Invalid command format. Please use: !editcmd <commandname> <newResponse>');
+      }
+      return;
+  }
 
-    const [, commandname, newResponse] = match;
+  const [, commandname, newResponse] = match;
 
-    // Remove # in front of the channel name
-    const cleanedTarget = target.replace(/^#/, '');
+  // Remove # in front of the channel name
+  const cleanedTarget = target.replace(/^#/, '');
 
-    // Sanitize input
-    const sanitizedCommandname = sanitizeInput(commandname);
-    const sanitizedNewResponse = sanitizeInput(newResponse);
+  // Sanitize input
+  const sanitizedCommandname = sanitizeInput(commandname);
+  const sanitizedNewResponse = sanitizeInput(newResponse);
 
-    // Edit an existing command in the database only if the channel matches
-    const query = 'SELECT * FROM commands WHERE commandname = ? AND channel = ?';
-    db.get(query, [sanitizedCommandname, cleanedTarget], function (err, result) {
-        if (err) {
-            console.error('Error checking command:', err.message);
-            if (callback && typeof callback === 'function') {
-                callback(`Error editing command: ${err.message}`);
-            }
-        } else if (result && isValidChannel(cleanedTarget, sanitizedCommandname)) {
-            const updateQuery = 'UPDATE commands SET response = ? WHERE commandname = ? AND channel = ?';
-            db.run(updateQuery, [String(sanitizedNewResponse), String(sanitizedCommandname), String(cleanedTarget)], function (updateErr) {
-                if (updateErr) {
-                    console.error('Error editing command:', updateErr.message);
-                    if (callback && typeof callback === 'function') {
-                        callback(`Error editing command: ${updateErr.message}`);
-                    }
-                } else {
-                    console.log(`Command edited: ${commandname} in channel: ${cleanedTarget}`);
-                    if (callback && typeof callback === 'function') {
-                        callback(`Command edited: ${commandname}`);
-                    }
-                }
-            });
-        } else {
-            if (callback && typeof callback === 'function') {
-                callback(`Command not found in channel: ${cleanedTarget}`);
-            }
-        }
-    });
+  // Edit an existing command in the database only if the channel matches
+  const query = 'SELECT * FROM commands WHERE commandname = ? AND channel = ?';
+  db.get(query, [sanitizedCommandname, cleanedTarget], function (err, result) {
+      if (err) {
+          console.error('Error checking command:', err.message);
+          if (callback && typeof callback === 'function') {
+              callback(`Error editing command: ${err.message}`);
+          }
+      } else if (result && isValidChannel(cleanedTarget, sanitizedCommandname)) {
+          const updateQuery = 'UPDATE commands SET response = ? WHERE commandname = ? AND channel = ?';
+          db.run(updateQuery, [String(sanitizedNewResponse), String(sanitizedCommandname), String(cleanedTarget)], function (updateErr) {
+              if (updateErr) {
+                  console.error('Error editing command:', updateErr.message);
+                  if (callback && typeof callback === 'function') {
+                      callback(`Error editing command: ${updateErr.message}`);
+                  }
+              } else {
+                  console.log(`Command edited: ${commandname} in channel: ${cleanedTarget}`);
+                  if (callback && typeof callback === 'function') {
+                      callback(`Command edited: ${commandname}`);
+                  }
+              }
+          });
+      } else {
+          if (callback && typeof callback === 'function') {
+              callback(`Command not found in channel: ${cleanedTarget}`);
+          }
+      }
+  });
 }
 
 function deleteCommand(target, msg, username, callback) {
-    // Extract commandname from the message
-    const match = /^!delcmd (\S+)/.exec(msg.toLowerCase());
+  // Extract commandname from the message
+  const match = /^!delcmd (\S+)/.exec(msg);
 
-    if (!match) {
-        // If the message doesn't match the expected format, notify the user
-        if (callback && typeof callback === 'function') {
-            callback('Invalid command format. Please use: !delcmd <commandname>');
-        }
-        return;
-    }
+  if (!match) {
+      // If the message doesn't match the expected format, notify the user
+      if (callback && typeof callback === 'function') {
+          callback('Invalid command format. Please use: !delcmd <commandname>');
+      }
+      return;
+  }
 
-    const [, commandname] = match;
+  const [, commandname] = match;
 
-    // Remove # in front of the channel name
-    const cleanedTarget = target.replace(/^#/, '');
+  // Remove # in front of the channel name
+  const cleanedTarget = target.replace(/^#/, '');
 
-    // Sanitize input
-    const sanitizedCommandname = sanitizeInput(commandname);
+  // Sanitize input
+  const sanitizedCommandname = sanitizeInput(commandname);
 
-    // Delete a command from the database only if the channel matches
-    const query = 'SELECT * FROM commands WHERE commandname = ? AND channel = ?';
-    db.get(query, [sanitizedCommandname, cleanedTarget], function (err, result) {
-        if (err) {
-            console.error('Error checking command:', err.message);
-            if (callback && typeof callback === 'function') {
-                callback(`Error deleting command: ${err.message}`);
-            }
-        } else if (result && isValidChannel(cleanedTarget, sanitizedCommandname)) {
-            const deleteQuery = 'DELETE FROM commands WHERE commandname = ? AND channel = ?';
-            db.run(deleteQuery, [sanitizedCommandname, cleanedTarget], function (deleteErr) {
-                if (deleteErr) {
-                    console.error('Error deleting command:', deleteErr.message);
-                    if (callback && typeof callback === 'function') {
-                        callback(`Error deleting command: ${deleteErr.message}`);
-                    }
-                } else {
-                    console.log(`Command deleted: ${commandname} in channel: ${cleanedTarget}`);
-                    if (callback && typeof callback === 'function') {
-                        callback(`Command deleted: ${commandname}`);
-                    }
-                }
-            });
-        } else {
-            if (callback && typeof callback === 'function') {
-                callback(`Command not found in channel: ${cleanedTarget}`);
-            }
-        }
-    });
+  // Delete a command from the database only if the channel matches
+  const query = 'SELECT * FROM commands WHERE commandname = ? AND channel = ?';
+  db.get(query, [sanitizedCommandname, cleanedTarget], function (err, result) {
+      if (err) {
+          console.error('Error checking command:', err.message);
+          if (callback && typeof callback === 'function') {
+              callback(`Error deleting command: ${err.message}`);
+          }
+      } else if (result && isValidChannel(cleanedTarget, sanitizedCommandname)) {
+          const deleteQuery = 'DELETE FROM commands WHERE commandname = ? AND channel = ?';
+          db.run(deleteQuery, [sanitizedCommandname, cleanedTarget], function (deleteErr) {
+              if (deleteErr) {
+                  console.error('Error deleting command:', deleteErr.message);
+                  if (callback && typeof callback === 'function') {
+                      callback(`Error deleting command: ${deleteErr.message}`);
+                  }
+              } else {
+                  console.log(`Command deleted: ${commandname} in channel: ${cleanedTarget}`);
+                  if (callback && typeof callback === 'function') {
+                      callback(`Command deleted: ${commandname}`);
+                  }
+              }
+          });
+      } else {
+          if (callback && typeof callback === 'function') {
+              callback(`Command not found in channel: ${cleanedTarget}`);
+          }
+      }
+  });
 }
 
 function isValidChannel(channel, commandname, callback) {
