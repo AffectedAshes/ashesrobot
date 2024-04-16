@@ -126,7 +126,7 @@ const { sanitizeInput } = require('./sanitizer');
 
 function addCommand(target, msg, username, callback) {
   // Extract commandname and response from the message
-  const match = /^!addcmd (\S+) (.+)/.exec(msg);
+  const match = /^!addcmd (\S+) (.+)/i.exec(msg);
   
   if (!match) {
       // If the message doesn't match the expected format, notify the user
@@ -136,7 +136,10 @@ function addCommand(target, msg, username, callback) {
       return;
   }
 
-  const [, commandname, response] = match;
+  let [, commandname, response] = match;
+
+  // Convert commandName to lowercase
+  commandname = commandname.toLowerCase(); 
 
   // Remove # in front of the channel name
   const cleanedTarget = target.replace(/^#/, '');
@@ -181,7 +184,7 @@ function addCommand(target, msg, username, callback) {
 
 function editCommand(target, msg, username, callback) {
   // Extract commandname and newResponse from the message
-  const match = /^!editcmd (\S+) (.+)/.exec(msg);
+  const match = /^!editcmd (\S+) (.+)/i.exec(msg);
 
   if (!match) {
       // If the message doesn't match the expected format, notify the user
@@ -191,7 +194,10 @@ function editCommand(target, msg, username, callback) {
       return;
   }
 
-  const [, commandname, newResponse] = match;
+  let [, commandname, newResponse] = match;
+
+  // Convert commandName to lowercase
+  commandname = commandname.toLowerCase(); 
 
   // Remove # in front of the channel name
   const cleanedTarget = target.replace(/^#/, '');
@@ -233,7 +239,7 @@ function editCommand(target, msg, username, callback) {
 
 function deleteCommand(target, msg, username, callback) {
   // Extract commandname from the message
-  const match = /^!delcmd (\S+)/.exec(msg);
+  const match = /^!delcmd (\S+)$/i.exec(msg);
 
   if (!match) {
       // If the message doesn't match the expected format, notify the user
@@ -243,7 +249,10 @@ function deleteCommand(target, msg, username, callback) {
       return;
   }
 
-  const [, commandname] = match;
+  let [, commandname] = match;
+
+  // Convert commandName to lowercase
+  commandname = commandname.toLowerCase(); 
 
   // Remove # in front of the channel name
   const cleanedTarget = target.replace(/^#/, '');
