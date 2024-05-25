@@ -55,7 +55,7 @@ async function chatGPTHandler(prompt, retryCount = 0) {
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4o',
         messages: [
           { role: 'system', content: 'You are a helpful assistant. Keep your answers as short and precise as possible. Please try to not go over the maximum of 800 characters per response.' },
           { role: 'user', content: prompt },
