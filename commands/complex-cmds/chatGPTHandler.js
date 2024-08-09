@@ -61,7 +61,7 @@ async function chatGPTHandler(prompt, retryCount = 0) {
           { role: 'user', content: prompt },
         ],
         max_tokens: 350, // Adjust the max_tokens value as needed
-        temperature: 0.7, // Adjust the temperature value as needed
+        temperature: 1, // Adjust the temperature value as needed
         // stop: '', // Uncomment and set a stop sequence if needed
       },
       {

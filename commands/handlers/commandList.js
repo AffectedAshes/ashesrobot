@@ -3,7 +3,9 @@
 const { hasPermission } = require('./permissions');
 const { addCommand, editCommand, deleteCommand, getAllCommands } = require('./db');
 const { changeStreamTitle, changeStreamGame } = require('./streamCommands');
+const { getWorldRecord, getPersonalBest } = require('../complex-cmds/src');
 const { playSlots } = require('../complex-cmds/slots');
+const { handleTranslateCommand, setTranslateCooldown } = require('../complex-cmds/translate');
 const { handleHangmanCommands, setHangmanCooldown } = require('../complex-cmds/hangmanBot');
 const { processChatGPTCommand } = require('../complex-cmds/chatGPTHandler');
 const { metronomeCommand } = require('../complex-cmds/metronome');
@@ -91,10 +93,42 @@ const commandList = {
     cooldown: false,
     execute: changeStreamGame,
   },
+  '!wr': {
+    cooldown: false,
+    execute: async (target, client, context, msg) => {
+        const args = msg.slice('!wr'.length).trim().split(',');
+        if (args.length < 2) {
+            client.say(target, 'Invalid command format. Please use: !wr <gameName>, <categoryName>, <variableName> - variableName does not have to be provided.');
+            return;
+        }
+        const [gameName, categoryName, variableValue] = args.map(arg => arg.trim());
+        const response = await getWorldRecord(gameName, categoryName, variableValue);
+        client.say(target, response);
+    },
+  },
+  '!pb': {
+    cooldown: false,
+    execute: async (target, client, context, msg) => {
+      const args = msg.slice('!pb'.length).trim().split(',');
+      if (args.length < 3) {
+        client.say(target, 'Invalid command format. Please use: !pb <gameName>, <categoryName>, <runnerName>');
+        return;
+      }
+      const [gameName, categoryName, runnerName] = args.map(arg => arg.trim());
+      const response = await getPersonalBest(gameName, categoryName, runnerName);
+      client.say(target, response);
+    },
+  },
   '!slots': {
     cooldown: true, //activate and deactivate cooldown (user specific)
     cooldownDuration: 60, //set cooldown duration for command in seconds
     execute: playSlots,
+  },
+  '!translate': {
+    cooldown: true,
+    cooldownDuration: 5,
+    execute: handleTranslateCommand,
+    postExecute: setTranslateCooldown, // Set global cooldown for translate
   },
   '!hangman': {
     cooldown: false, //needs to be false, dont want user specific cooldown for hangman
