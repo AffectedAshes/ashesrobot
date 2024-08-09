@@ -9,7 +9,7 @@ const translateChannels = {}; // Track game state per channel
 const translateCooldowns = {}; // Track cooldowns per channel
 
 // Timeout duration for the game
-const GAME_TIMEOUT = 1 * 60 * 1000; // 15 minutes in milliseconds
+const GAME_TIMEOUT = 15 * 60 * 1000; // 15 minutes in milliseconds
 
 function startTranslateGame(target, client) {
     const randomIndex = random.integer(0, translationList.length - 1);
