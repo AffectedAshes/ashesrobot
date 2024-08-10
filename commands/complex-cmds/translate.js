@@ -9,7 +9,7 @@ const translateChannels = {}; // Track game state per channel
 const translateCooldowns = {}; // Track cooldowns per channel
 
 // Timeout duration for the game
-const GAME_TIMEOUT = 15 * 60 * 1000; // 15 minutes in milliseconds
+const GAME_TIMEOUT = 5 * 60 * 1000; // 5 minutes in milliseconds
 
 function startTranslateGame(target, client) {
     const randomIndex = random.integer(0, translationList.length - 1);
@@ -17,7 +17,7 @@ function startTranslateGame(target, client) {
     translateChannels[target] = {
         currentName: selectedTranslation.name.toLowerCase(),
         currentExplanation: selectedTranslation.explanation,
-        timeout: setTimeout(() => endTranslateGame(target, client), GAME_TIMEOUT) // Set timeout for 15 minutes
+        timeout: setTimeout(() => endTranslateGame(target, client), GAME_TIMEOUT) // Set timeout
     };
     return translateChannels[target].currentExplanation;
 }
