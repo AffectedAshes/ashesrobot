@@ -7,6 +7,7 @@ const { translationList } = require('../../data/wordLists');
 
 const translateChannels = {}; // Track game state per channel
 const translateCooldowns = {}; // Track cooldowns per channel
+const translateCooldownMessages = {}; // Track if cooldown message has been sent per channel
 
 // Timeout duration for the game
 const GAME_TIMEOUT = 5 * 60 * 1000; // 5 minutes in milliseconds
@@ -52,18 +53,24 @@ function isTranslateCooldownActive(target) {
 
 function setTranslateCooldown(target) {
     translateCooldowns[target] = Date.now() + 30 * 1000; // 30 seconds cooldown
+    translateCooldownMessages[target] = false;  // Reset cooldown message flag
 }
 
-function handleTranslateCommand(target, client, context, msg) {
+function handleTranslateCommand(target, client, context, msg, alias = '!translate') {
     const args = msg.trim().split(' ').slice(1);
 
+    // Check if the cooldown is active
     if (isTranslateCooldownActive(target)) {
-        client.say(target, `@${context.username} Please wait a moment before starting a new game.`);
+        // Only send the cooldown message if the command used was !translate (not !t)
+        if (!translateCooldownMessages[target] && alias === '!translate') {
+            client.say(target, `@${context.username} Please wait a moment before starting a new game.`);
+            translateCooldownMessages[target] = true;  // Set the flag to true, so the message is not repeated
+        }
         return;
     }
 
     // If no game is currently active and no arguments are provided, start a new game
-    if (!isGameActive(target) && args.length === 0) {
+    if (!isGameActive(target) && args.length === 0 && alias === '!translate') {
         const explanation = startTranslateGame(target, client);
         client.say(target, `Here's your translation: ${explanation}`);
     
@@ -71,7 +78,7 @@ function handleTranslateCommand(target, client, context, msg) {
     } else if (isGameActive(target) && args.length === 0) {
         client.say(target, `@${context.username} The game already started, try !translate + your guess.`);
     
-    // If a game is currently active and a guess is provided
+    // If a game is currently active and a guess is provided (for both !translate and !t)
     } else if (isGameActive(target) && args.length > 0) {
         const guess = args.join(' ');
         if (checkTranslateGuess(target, guess)) {

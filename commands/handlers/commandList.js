@@ -127,8 +127,13 @@ const commandList = {
   '!translate': {
     cooldown: true,
     cooldownDuration: 5,
-    execute: handleTranslateCommand,
+    execute: (target, client, context, msg) => handleTranslateCommand(target, client, context, msg, '!translate'),
     postExecute: setTranslateCooldown, // Set global cooldown for translate
+  },
+  '!t': {
+    cooldown: true,
+    cooldownDuration: 5,
+    execute: (target, client, context, msg) => handleTranslateCommand(target, client, context, msg, '!t')
   },
   '!hangman': {
     cooldown: false, //needs to be false, dont want user specific cooldown for hangman
