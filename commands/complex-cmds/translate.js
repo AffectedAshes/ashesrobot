@@ -1,9 +1,8 @@
-// translate.js
-
 const { Random } = require('random-js');
 const random = new Random();
 
 const { translationList } = require('../../data/wordLists');
+const { sanitizeInput } = require('../handlers/sanitizer');
 
 const translateChannels = {}; // Track game state per channel
 const translateCooldowns = {}; // Track cooldowns per channel
@@ -16,7 +15,7 @@ function startTranslateGame(target, client) {
     const randomIndex = random.integer(0, translationList.length - 1);
     const selectedTranslation = translationList[randomIndex];
     translateChannels[target] = {
-        currentName: selectedTranslation.name.toLowerCase(),
+        currentName: sanitizeInput(selectedTranslation.name.toLowerCase()),  // Sanitize the selected translation name
         currentExplanation: selectedTranslation.explanation,
         timeout: setTimeout(() => endTranslateGame(target, client), GAME_TIMEOUT) // Set timeout
     };
@@ -57,7 +56,8 @@ function setTranslateCooldown(target) {
 }
 
 function handleTranslateCommand(target, client, context, msg, alias = '!translate') {
-    const args = msg.trim().split(' ').slice(1);
+    const sanitizedMessage = sanitizeInput(msg);  // Sanitize the entire message
+    const args = sanitizedMessage.trim().split(' ').slice(1);  // Split and trim sanitized message
 
     // Check if the cooldown is active
     if (isTranslateCooldownActive(target)) {
@@ -81,7 +81,9 @@ function handleTranslateCommand(target, client, context, msg, alias = '!translat
     // If a game is currently active and a guess is provided (for both !translate and !t)
     } else if (isGameActive(target) && args.length > 0) {
         const guess = args.join(' ');
-        if (checkTranslateGuess(target, guess)) {
+        const sanitizedGuess = sanitizeInput(guess);  // Sanitize the user's guess
+        
+        if (checkTranslateGuess(target, sanitizedGuess)) {
             client.say(target, `@${context.username} Correct! The name was indeed ${translateChannels[target].currentName.charAt(0).toUpperCase() + translateChannels[target].currentName.slice(1)}!`);
             resetTranslateGame(target);  // Reset the game
             setTranslateCooldown(target);  // Set the cooldown after game ends
