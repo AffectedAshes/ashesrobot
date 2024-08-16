@@ -1061,7 +1061,7 @@ const translationList = [
     { name: "Slowking", explanation: "foolish king" },
     { name: "Misdreavus", explanation: "dream witch" },
     { name: "Unown", explanation: "this know totem" },
-    { name: "Wobbuffett", explanation: "as expected, elderly man" },
+    { name: "Wobbuffet", explanation: "as expected, elderly man" },
     { name: "Girafarig", explanation: "odd qilin" },
     { name: "Pineco", explanation: "hazelnut ball" },
     { name: "Forretress", explanation: "fu-lie-tuo-si" },
