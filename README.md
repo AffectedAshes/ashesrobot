@@ -48,6 +48,19 @@ Hangman Minigame (5 minute cooldown between each hangman game)
   
   for guessing a letter or the full name (5 second cooldown per user for a guess)
 
+### Translate
+
+Chinese Pokémon Names translated with Google Translate and you have to guess what the Pokémon name is in English (30 second cooldown between each translate game)
+
+* `!translate`
+  
+  starts the mingame
+
+* `!translate <guess>`
+* `!t <guess>`
+
+  for guessing the Pokémon name (5 second cooldown per user for a guess)
+
 ### Slots
 
 Emote Slots Minigame (60 second cooldown per user) 
@@ -95,6 +108,13 @@ Get a random fact (30 second cooldown per user)
 Get the current weather for x city (30 second cooldown per user) 
 
 `!weather <city>`
+
+### SRC
+
+Get the World Record or Personal Best from speedrun.com for a specified game, category and runner
+
+`!wr <gameName>, <categoryName>, <variableName> - variableName does not have to be provided (e.g. ENG, JPN, Console, Emulator, etc).`
+`!pb <gameName>, <categoryName>, <runnerName>`
 
 ### Flail
 
