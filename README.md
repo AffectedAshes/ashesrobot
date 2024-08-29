@@ -113,8 +113,8 @@ Get the current weather for x city (30 second cooldown per user)
 
 Get the World Record or Personal Best from speedrun.com for a specified game, category and runner
 
-`!wr <gameName>, <categoryName>, <variableName> - variableName does not have to be provided (e.g. ENG, JPN, Console, Emulator, etc).`
-`!pb <gameName>, <categoryName>, <runnerName>`
+* `!wr <gameName>, <categoryName>, <variableName> - variableName does not have to be provided (e.g. ENG, JPN, Console, Emulator, etc).`
+* `!pb <gameName>, <categoryName>, <runnerName>`
 
 ### Flail
 
