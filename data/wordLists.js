@@ -1169,7 +1169,7 @@ const translationList = [
     { name: "Meditite", explanation: "ma-sha-na" },
     { name: "Medicham", explanation: "exactly thunder tutor" },
     { name: "Electrike", explanation: "thunder dropping beast" },
-    { name: "Manetric", explanation: "thunder electric beast" },
+    { name: "Manectric", explanation: "thunder electric beast" },
     { name: "Plusle", explanation: "positive charge pai-pai" },
     { name: "Minun", explanation: "negative charge pai-pai" },
     { name: "Volbeat", explanation: "electric firefly worm" },

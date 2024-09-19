@@ -1,3 +1,5 @@
+// translate.js
+
 const { Random } = require('random-js');
 const random = new Random();
 
