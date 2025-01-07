@@ -167,7 +167,8 @@ const runners = [
     "joylin728",
     "Aspect",
     "Grogir",
-    "SINNED"
+    "SINNED",
+    "PrincePecky"
 ];
 
 const items = [
